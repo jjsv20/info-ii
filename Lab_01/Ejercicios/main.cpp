@@ -32,14 +32,14 @@ void ejercicio23();
 
 void ejercicio25();
 
-int ejercicio27();
+void ejercicio27();
 
-int ejercicio29();
+void ejercicio29();
 
 
 int main()
 {
-    ejercicio25();
+    ejercicio23();
     return 0;
 }
 
@@ -176,7 +176,19 @@ void ejercicio21()
 
 void ejercicio23()
 {
-
+    int A, B, x, mcd, mcm;
+    cout << "Ingrese dos nuemros: ";
+    cin >> A >> B;
+    int a_c = A;
+    int b_c = B;
+    while (B != 0) {
+        x = B;
+        B = A % B;
+        A = x;
+    }
+    mcd = A;
+    mcm = (a_c * b_c)/mcd;
+    cout << "El MCM de " << a_c << " y " << b_c << " es: " << mcm << endl;
 }
 
 void ejercicio25()
@@ -189,4 +201,65 @@ void ejercicio25()
         longitud++;
     }
     cout << N_c << " tiene " << longitud << " digitos" << endl;
+}
+
+void ejercicio27()
+{
+    int a, b, suma, resta, multiplicacion, division;
+    char signo;
+    cout << "Ingrese el operando de la operacion que desea realiza: ";
+    cin >> signo;
+    if (signo == '+'){
+        cout << "Ingrese el primero numero: ";
+        cin >> a;
+        cout << "Ingrese el segundo numero: ";
+        cin >> b;
+        suma = a + b;
+        cout << a << signo << b << "=" << suma << endl;
+    } else if (signo == '-'){
+        cout << "Ingrese el primero numero: ";
+        cin >> a;
+        cout << "Ingrese el segundo numero: ";
+        cin >> b;
+        resta = a - b;
+        cout << a << signo << b << "=" << resta << endl;
+    } else if (signo == 'x' || 'X'){
+        cout << "Ingrese el primero numero: ";
+        cin >> a;
+        cout << "Ingrese el segundo numero: ";
+        cin >> b;
+        multiplicacion = a * b;
+        cout << a << signo << b << "=" << multiplicacion << endl;
+    } else if (signo == '/'){
+        cout << "Ingrese el primero numero: ";
+        cin >> a;
+        cout << "Ingrese el segundo numero: ";
+        cin >> b;
+        division = a / b;
+        cout << a << signo << b << "=" << division << endl;
+    }
+}
+
+void ejercicio29()
+{
+    int x=0, y=100, B=0;
+    char respuesta;
+    cout << "Piensa un numero del uno al 100, voy a adivinarlo: ";
+
+    while (true){
+        B = (x+y)/2;
+        cout << "El numero es: " << B << " ?" << endl;
+        cout << "Utilice '<' si el numero es mayor, '>' si es menor o '=' si es igual: ";
+        cin >> respuesta;
+        if (respuesta == '<'){
+            x = B + 1;
+            cout << B << endl;
+        } else if (respuesta == '>') {
+            y = B - 1;
+            cout << B << endl;
+        } else if (respuesta == '='){
+            cout << "Numero adivinado: " << B << endl;
+            break;
+        }
+    }
 }
