@@ -18,7 +18,7 @@ int ejercicio9();
 
 int ejercicio11();
 
-void ejercicio13();
+int ejercicio13();
 
 void ejercicio15();
 
@@ -39,7 +39,7 @@ void ejercicio29();
 
 int main()
 {
-    ejercicio25();
+    ejercicio29();
     return 0;
 }
 
@@ -109,16 +109,18 @@ int ejercicio11()
     return 0;
 }
 
-void ejercicio13()
+int ejercicio13()
 {
     int N;
     cout << "Ingrese un numero: ";
     cin >> N;
+    cout << "Los divisores de " << N << " son: " << endl;
     for (int i = 1; i <= N; i++){
         if (N % i == 0){
             cout << i << endl;
         }
     }
+    return 0;
 }
 
 void ejercicio15()
@@ -132,7 +134,7 @@ void ejercicio15()
         cout << "Ingrese un numero: ";
         cin >> N;
     }
-    cout << sumatoria << endl;
+    cout << "El resultado de la sumatoria es: " << sumatoria << endl;
 }
 
 
@@ -171,6 +173,9 @@ void ejercicio21()
     if (C >= 'a' && C <= 'z'){
         C = C - 32;
     }
+    else if (C >= 'A' && C <= 'Z'){
+        C = C + 32;
+    }
     cout << "Letra convertida: " << C << endl;
 }
 
@@ -193,7 +198,7 @@ void ejercicio23()
 
 void ejercicio25()
 {
-    int N, longitud;
+    int N, longitud=0;
     cout << "Ingrese un numero: ";
     cin >> N;
     int N_c = N;
@@ -251,10 +256,10 @@ void ejercicio29()
         cout << "El numero es: " << B << " ?" << endl;
         cout << "Utilice '<' si el numero es mayor, '>' si es menor o '=' si es igual: ";
         cin >> respuesta;
-        if (respuesta == '<'){
+        if (respuesta == '>'){
             x = B + 1;
             cout << B << endl;
-        } else if (respuesta == '>') {
+        } else if (respuesta == '<') {
             y = B - 1;
             cout << B << endl;
         } else if (respuesta == '='){
