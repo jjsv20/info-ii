@@ -23,7 +23,7 @@ int problema17();
 
 int main()
 {
-    problema17();
+    problema13();
     return 0;
 }
 
