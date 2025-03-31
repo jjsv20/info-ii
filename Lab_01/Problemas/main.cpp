@@ -12,7 +12,7 @@ int problema7();
 
 int problema9();
 
-int problema11();
+void problema11();
 
 int problema13();
 
@@ -23,7 +23,7 @@ int problema17();
 
 int main()
 {
-    problema13();
+    problema17();
     return 0;
 }
 
@@ -133,6 +133,7 @@ int problema5()
             espacios ++;
         }
     }
+    return 0;
 }
 
 int problema7()
@@ -141,13 +142,10 @@ int problema7()
     cout << "Ingrese un numero: ";
     cin >> N;
 
-    while (c < N){
+    while (c <= N){
         if (c % 2 == 0){
             suma += c;
         }
-
-        //cout << "La serie de Fibonacci hasta " << N << " es: ";
-        cout << c << ", ";
         c = a + b;
         a = b;
         b = c;
@@ -174,7 +172,7 @@ int problema9()
     return 0;
 }
 
-int problema11()
+void problema11()
 {
     int N, a, b, c, mcm = 1, x;
     cout << "Ingrese un numero: ";
@@ -194,29 +192,74 @@ int problema11()
 
 int problema13()
 {
-    int N, Primo;
+    int N, Primo, suma_primos;
     cout << "Ingrese un numero: ";
     cin >> N;
     for (int i = 2; i <= N; i++){
         Primo = 1;
-        for(int j=2; j<=i/2; j++) {
+        for(int j = 2; j <= i/2; j++) {
             if(i % j == 0) {
                 Primo = 0;
+                break;
             }
         }
-
         if(Primo == 1) {
-            cout << i << " es un número primo." << endl;
-        } else {
-            cout << i << " no es un número primo." << endl;
+            suma_primos += i;
         }
-
-        return 0;
     }
+    cout << "El resultado de la suma es: " << suma_primos << endl;
+    return 0;
 }
 
+int problema15()
+{
+    int N, inicio=1, esquinas, suma_esquinas=1;
+    cout << "Ingrese un numero impar: ";
+    cin >> N;
+    if (N % 2 == 0){
+        cout << N << " es un numero par";
+    }
+    for (int i = 1; i <= N/2; i++){
+        esquinas = i*2;
+        for (int j = 0; j < 4; j++){
+            inicio += esquinas;
+            suma_esquinas += inicio;
+        }
+    }
+    cout << "En una espiral de " << N << "x" << N << ", la suma es: " << suma_esquinas << endl;
+    return 0;
+}
 
-
+int problema17()
+{
+    int K, T, contador_d, max=0, max_divisores;
+    cout << "Ingrese un numero: ";
+    cin >> K;
+    for (int i = 1; i <= K; i++){
+        T = i * (i + 1) / 2;
+        contador_d = 0;
+        if (T <= K){
+            cout <<endl;
+            cout << T << ": ";
+            for (int j = 1; j <= T; j++){
+                if (T % j == 0){
+                    cout << j;
+                    if (j != T) {
+                        cout << ",";
+                    }
+                    contador_d++;
+                }
+            }
+            cout << endl;
+            if (contador_d > max){
+            max = contador_d;
+            max_divisores = T;
+            }
+        }
+    }
+    cout << "El numero es: " << max_divisores << " que tiene " << max << " divisores" << endl;
+    return 0;
+}
 
 
 
