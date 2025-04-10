@@ -1,11 +1,12 @@
 #include <iostream>
 using namespace std;
+#include <cstring>
 
 void problema1();
 
 void problema2();
 
-void problema3();
+bool problema3();
 
 void problema4();
 
@@ -41,7 +42,7 @@ void problema18();
 
 int main()
 {
-    problema2();
+    problema4();
     return 0;
 }
 
@@ -85,7 +86,43 @@ void problema2()
     }
 }
 
-void problema3()
+bool problema3()
 {
+    char cadena1[100], cadena2[100];
+    cout << "Ingrese la primera cadena: ";
+    cin.getline(cadena1, 100);
+    cout << "Ingrese la segunda cadena: ";
+    cin.getline(cadena2, 100);
 
+    if(strlen(cadena1) == strlen(cadena2)) {
+        //cout << "Igual longitud";
+        bool son_iguales = true;
+        for(int i = 0; i < strlen(cadena1); i++){
+            if(cadena1[i] != cadena2[i]){
+                son_iguales = false;
+                break;
+            }
+        }
+        if(son_iguales){
+            cout << "Las cadenas son iguales." << endl;
+            return true;
+        }else{
+            cout << "Las cadenas no son iguales." << endl;
+            return false;
+        }
+    }
+    cout << "Las cadenas no son iguales." << endl;
+    return false;
+}
+
+void problema4()
+{
+    char cadenanum[100];
+    int numero = 0;
+    cout << "Ingrese una cadena de caracteres: ";
+    cin >> cadenanum;
+    for(int i = 0; i < strlen(cadenanum); i++){
+        numero = numero * 10 +(cadenanum[i] - '0');
+    }
+    cout << numero;
 }
