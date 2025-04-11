@@ -42,7 +42,7 @@ void problema18();
 
 int main()
 {
-    problema4();
+    problema8();
     return 0;
 }
 
@@ -118,11 +118,86 @@ bool problema3()
 void problema4()
 {
     char cadenanum[100];
+    char *p = cadenanum;
     int numero = 0;
     cout << "Ingrese una cadena de caracteres: ";
     cin >> cadenanum;
-    for(int i = 0; i < strlen(cadenanum); i++){
-        numero = numero * 10 +(cadenanum[i] - '0');
+    while(*p){
+        numero = numero * 10 + (*p - '0');
+        p++;
     }
-    cout << numero;
+    cout << "Numero entero: " << numero;
+}
+
+void problema5()
+{
+    int numero;
+    char cadena[100];
+    int j = 0;
+    cout << "Ingrese un numero: ";
+    cin >> numero;
+    if(numero == 0){
+        cadena[j++] = '0';
+    }
+    while(numero > 0){
+        cadena[j++] = (numero % 10) + '0';
+        numero /= 10;
+    }
+    cadena[j] = '\0';
+    for(int k = 0; k < j/2; k++){
+        swap(cadena[k], cadena[j - 1 - k]);
+    }
+
+    cout << "Cadena: " << cadena << endl;
+}
+
+void problema6()
+{
+    char cadena_caracteres[100];
+    char cadenacopia[100];
+    cout << "Ingrese una cadena: ";
+    cin >> cadena_caracteres;
+    strcpy(cadenacopia, cadena_caracteres);
+    for (int i = 0; i < strlen(cadena_caracteres); i++) {
+        if (cadena_caracteres[i] >= 'a' && cadena_caracteres[i] <= 'z') {
+            cadena_caracteres[i] -= 32;
+        }
+    }
+    cout << "Original: " << cadenacopia << ". En mayuscula: " << cadena_caracteres << endl;
+}
+
+void problema7()
+{
+    char cadena[100];
+    char cadenacop[100];
+    char *p, *q, *k;
+    cout << "Ingrese una cadena: ";
+    cin >> cadena;
+    p = cadena;
+    q = cadenacop;
+    while(*p){
+        *q = *p;
+        p++;
+        q++;
+    }
+    *q = '\0';
+    for(p = cadena; *p; p++){
+        q = p + 1;
+        k = p + 1;
+        while(*q){
+            if(*q != *p){
+                *k = *q;
+                *k++;
+            }
+            q++;
+        }
+        *k = '\0';
+    }
+    cout << "Original: " << cadenacop << endl;
+    cout << "Sin repetidos: " << cadena << endl;
+}
+
+void problema8()
+{
+
 }
