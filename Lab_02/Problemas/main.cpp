@@ -2,21 +2,22 @@
 using namespace std;
 #include <cstring>
 
-void problema1();
+void problema1();//
 
-void problema2();
+void problema2();//pendiente//
 
-bool problema3();
+bool problema3();//
 
-void problema4();
+void problema4();//
 
-void problema5();
+void problema5();//
 
-void problema6();
+void problema6();//
 
-void problema7();
+void problema7();//
 
-void problema8();
+void problema8();//
+void problema8puntero();//
 
 void problema9();
 
@@ -42,7 +43,7 @@ void problema18();
 
 int main()
 {
-    problema8();
+    problema10();
     return 0;
 }
 
@@ -198,6 +199,144 @@ void problema7()
 }
 
 void problema8()
+{
+    char cadenacaracteres[100];
+    char letras[100];
+    char numeros[100];
+    int l = 0;
+    int n = 0;
+    cout << "Ingrese una cadena de caracteres: ";
+    cin.getline(cadenacaracteres, 100);
+    for(int i = 0; i < strlen(cadenacaracteres); i++){
+        if (cadenacaracteres[i] >= '0' && cadenacaracteres[i] <= '9') {
+            numeros[n++] = cadenacaracteres[i];
+        }else {
+            letras[l++] = cadenacaracteres[i];
+        }
+    }
+    letras[l] = '\0';
+    numeros[n] = '\0';
+    cout << "Original: " << cadenacaracteres << "." << endl;
+    cout << "Texto: " << letras << "." << endl;
+    cout << "Numero: " << numeros << "." << endl;
+}
+
+void problema8puntero()
+{
+    char *cadenacaracteres = new char[100];
+    char *letras = new char[100];
+    char *numeros = new char[100];
+    int l = 0;
+    int n = 0;
+    cout << "Ingrese una cadena de caracteres: ";
+    cin.getline(cadenacaracteres, 100);
+    for(int i = 0; i < strlen(cadenacaracteres); i++){
+        if(*(cadenacaracteres + i) >= '0' && *(cadenacaracteres + i) <= '9'){
+            *(numeros + n) = *(cadenacaracteres + i);
+            n++;
+        } else {
+            *(letras + l) = *(cadenacaracteres + i);
+            l++;
+        }
+    }
+    *(numeros + n) = '\0';
+    *(letras + l) = '\0';
+    cout << "Original: " << cadenacaracteres << "." << endl;
+    cout << "Texto: " << letras << "." << endl;
+    cout << "Numero: " << numeros << "." << endl;
+    delete[] cadenacaracteres;
+    delete[] letras;
+    delete[] numeros;
+}
+
+/*/void problema9()
+{
+    int N, suma=0;
+    char caracteresnum[100];
+    char separacion[100];
+    cout << "Ingrese un numero: ";
+    cin >> N;
+    if(N <= 0){
+        cout << "Ingrese un numero valido";
+    }
+    cout << "Ingrese una cadena de caracteres: ";
+    cin >> caracteresnum;
+    if(strlen(caracteresnum) % N == 0){
+        for(int i = 0; i < strlen(caracteresnum); i += N){
+            for(int j = 0; j < N; j++){
+                separacion[j] = caracteresnum[i + j];
+            }
+            separacion[N] = '\0';
+        }
+
+
+    }else{
+        int ceros = N - (strlen(caracteresnum) % N);
+        for(int j - ceros - 1; j >= 0; i--){
+            caracteresnum[i + ceros] = caracteresnum[i];
+        }
+        for(int i = 0; i < ceros; i++){
+            caracteresnum[i] = '0';
+        }
+    }
+}/*/
+
+void problema10()
+{
+    int total=0;
+    string romano;
+    cout << "Ingrese un numero romano: ";
+    cin >> romano;
+    for(int i = 0; i < romano.length(); i++){
+        int caracter = 0;
+        int caractersiguiente = 0;
+        if(romano[i] == 'M'){
+            romano[i] += 32;
+            caracter = 1000;
+        } else if(romano[i] == 'D'){
+            caracter = 500;
+        } else if(romano[i] == 'C'){
+            caracter = 100;
+        } else if(romano[i] == 'L'){
+            caracter = 50;
+        } else if(romano[i] == 'X'){
+            caracter = 10;
+        } else if(romano[i] == 'V'){
+            caracter = 5;
+        } else if(romano[i] == 'I'){
+            caracter = 1;
+        }
+        if(i + 1 < romano.length()){
+            if(romano[i + 1] == 'M'){
+                romano[i] += 32;
+                caractersiguiente = 1000;
+            } else if(romano[i + 1] == 'D'){
+                caractersiguiente = 500;
+            } else if(romano[i + 1] == 'C'){
+                caractersiguiente = 100;
+            } else if(romano[i + 1] == 'L'){
+                caractersiguiente = 50;
+            } else if(romano[i + 1] == 'X'){
+                caractersiguiente = 10;
+            } else if(romano[i + 1] == 'V'){
+                caractersiguiente = 5;
+            } else if(romano[i + 1] == 'I'){
+                caractersiguiente = 1;
+            }
+        }
+        if(caracter < caractersiguiente){
+            total -= caracter;
+        } else {
+            total += caracter;
+        }
+    }
+
+    cout << "El numero ingresado fue: "<< romano << endl ;
+    cout << "Que corresponde a: " << total << endl;
+    //return 0;
+}
+
+void problema11()
 {
 
 }
