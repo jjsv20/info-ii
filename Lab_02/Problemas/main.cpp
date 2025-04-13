@@ -28,7 +28,7 @@ void problema11();//
 
 bool problema12();//
 
-void problema13();//pendiente//
+void problema13();//
 
 void problema14();//
 
@@ -545,9 +545,32 @@ bool problema12()
     return 0;
 }
 
-void problema13()
-{
-    //pendiente
+const int filas = 6;
+const int columnas = 8;
+int estrellas(int (*matriz)[columnas]){
+    int numeroestrellas = 0;
+    float cantidadluz;
+    for(int i = 1; i < filas - 1; i++){
+        for(int k = 1; k < columnas - 1; k++){
+            cantidadluz = ((matriz[i][k] + matriz[i][k - 1] + matriz[i - 1][k] + matriz[i + 1][k]) / 5.0);
+            if(cantidadluz > 6){
+                numeroestrellas++;
+            }
+        }
+    }
+    return numeroestrellas;
+}
+void problema13(){
+    int matriz[filas][columnas] = {
+        {0,3,4,0,0,0,6,8},
+        {5,13,6,0,0,0,2,3},
+        {2,6,2,7,3,0,10,0},
+        {0,0,4,15,4,1,6,0},
+        {0,0,7,12,6,9,10,4},
+        {5,0,6,10,6,4,8,0}
+    };
+    int numeroestrellas = estrellas(matriz);
+    cout << "Numero de estrellas encontradas: " << numeroestrellas << endl;
 }
 
 void problema14()
@@ -637,7 +660,64 @@ void problema14()
     }while(opcion != '4');
 }
 
+void interseccion(int A[4], int B[4], int C[4]){
+    int A_x1 = A[0];
+    int A_y1 = A[1];
+    int A_x2 = A[0] + A[2];
+    int A_y2 = A[1] + A[3];
+
+    int B_x1 = B[0];
+    int B_y1 = B[1];
+    int B_x2 = B[0] + B[2];
+    int B_y2 = B[1] + B[3];
+
+    int C_x1;
+    if(A_x1 > B_x1){
+        C_x1 = A_x1;
+    }else {
+        C_x1 = B_x1;
+    }
+
+    int C_y1;
+    if(A_y1 > B_y1){
+        C_y1 = A_y1;
+    }else {
+        C_y1 = B_y1;
+    }
+
+    int C_x2;
+    if(A_x2 < B_x2) {
+        C_x2 = A_x2;
+    }else {
+        C_x2 = B_x2;
+    }
+
+    int C_y2;
+    if(A_y2 < B_y2){
+        C_y2 = A_y2;
+    }else {
+        C_y2 = B_y2;
+    }
+
+    if(C_x1 < C_x2 && C_y1 < C_y2) {
+        C[0] = C_x1;
+        C[1] = C_y1;
+        C[2] = C_x2 - C_x1;
+        C[3] = C_y2 - C_y1;
+    }else {
+        C[0] = C[1] = C[2] = C[3] = 0;
+    }
+}
 void problema15()
+{
+    int A[4] = {0, 0, 8, 4};
+    int B[4] = {5, 2, 6, 7};
+    int C[4];
+    interseccion(A, B, C);
+    cout << "Rectangulo interseccion C: " << "{" << C[0] << ", " << C[1] << ", " << C[2] << ", " << C[3] << "}" << endl;
+}
+
+void problema16()
 {
 
 }
