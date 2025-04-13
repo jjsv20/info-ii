@@ -6,6 +6,7 @@ using namespace std;
 #include <ctime>
 
 void problema1();//
+void problema1arduino();
 
 void problema2();//
 
@@ -16,13 +17,14 @@ void problema4();//
 void problema5();//
 
 void problema6();//
+void problema6arduino();
 
 void problema7();//
 
 void problema8();//
 void problema8puntero();//
 
-void problema9();//pendiente//
+void problema9();//
 
 void problema10();//
 void problema10arduino();//
@@ -37,7 +39,7 @@ void problema14();//
 
 void problema15();//
 
-void problema16();//------------
+void problema16();//-----
 
 void problema17();//
 void problema17arduino();//
@@ -48,7 +50,7 @@ void problema18();//
 
 int main()
 {
-    problema2();
+    problema9();
     return 0;
 }
 
@@ -75,6 +77,57 @@ void problema1()
         cout << "Faltante: " << cantidad << endl;
     }
 }
+
+/*/void problema1arduino()
+{
+    void setup() {
+        Serial.begin(9600);
+        while (!Serial);
+        long cantidad, billetesUsados, monedasUsadas;
+        long billetes[6] = {50000, 20000, 10000, 5000, 2000, 1000};
+        long monedas[4] = {500, 200, 100, 50};
+        Serial.println("Ingrese una cantidad de dinero (positivo): ");
+
+        while (Serial.available() == 0) {
+
+        }
+        cantidad = Serial.parseInt();
+        if (cantidad <= 0) {
+            Serial.println("Por favor, ingrese una cantidad positiva.");
+            return;
+        }
+
+        for (int i = 0; i < 6; i++) {
+            billetesUsados = cantidad / billetes[i];
+            Serial.print(billetes[i]);
+            Serial.print(": ");
+            Serial.println(billetesUsados);
+            cantidad = cantidad % billetes[i];
+            if (cantidad <= 0) {
+                break;
+            }
+        }
+        if (cantidad > 0) {
+            for (int j = 0; j < 4; j++) {
+                monedasUsadas = cantidad / monedas[j];
+                Serial.print(monedas[j]);
+                Serial.print(": ");
+                Serial.println(monedasUsadas);
+
+                cantidad = cantidad % monedas[j];
+                if (cantidad <= 0) {
+                    break;
+                }
+            }
+        }
+        if (cantidad > 0) {
+            Serial.print("Faltante: ");
+            Serial.println(cantidad);
+        }
+
+    void loop() {
+    }
+}/*/
 
 void problema2()
 {
@@ -177,6 +230,41 @@ void problema6()
     cout << "Original: " << cadenacopia << ". En mayuscula: " << cadena_caracteres << endl;
 }
 
+/*/void problema6arduino()
+{
+    void setup(){
+        Serial.begin(9600);
+        while(!Serial);
+        char candena_caracteres[100];
+        char cadenacopia[100];
+        int indice = 0;
+        Serial.println("Ingrese una cadena: ");
+        while(Serial.available() == 0){
+        }
+        while(Serial.available() > 0 && indice < 99){
+            char c = Serial.read();
+            if(c = '\n' || c == '\r') {
+                break;
+            }
+            cadena_caracteres[indice++] = c;
+            delay(10);
+        }
+        cadena_caracteres[indice] = '\0';
+        strcpy(cadenacopia,cadena_caracteres);
+        for(int i = 0; 1 < strlen(cadena_caracteres); i++){
+            if(cadena_caracteres[i] >= 'a' && cadena_caracteres[i] <= 'z'){
+                cadena_caracteres[i] -= 32;
+            }
+        }
+        Serial.print("Original: ");
+        Serial.println(cadenacopia),
+        Serial.print(". En mayuscula: ");
+        Serial.println(cadena_caracteres);
+    }
+    void loop(){
+    }
+}/*/
+
 void problema7()
 {
     char cadena[100];
@@ -261,34 +349,40 @@ void problema8puntero()
 
 void problema9()
 {
-    int N, suma=0;
+    int N, suma = 0;
     char caracteresnum[100];
-    char separacion[100];
+    char original[100];
+    char division[100];
     cout << "Ingrese un numero: ";
     cin >> N;
     if(N <= 0){
         cout << "Ingrese un numero valido";
+        return;
     }
     cout << "Ingrese una cadena de caracteres: ";
     cin >> caracteresnum;
-    if(strlen(caracteresnum) % N == 0){
-        for(int i = 0; i < strlen(caracteresnum); i += N){
-            for(int j = 0; j < N; j++){
-                separacion[j] = caracteresnum[i + j];
-            }
-            separacion[N] = '\0';
-        }
-
-
-    }else{
-        int ceros = N - (strlen(caracteresnum) % N);
-        for(int j - ceros - 1; j >= 0; i--){
+    strcpy(original, caracteresnum);
+    int longitud = strlen(caracteresnum);
+    int residuo = longitud % N;
+    if(residuo != 0) {
+        int ceros = N - residuo;
+        for(int i = longitud - 1; i >= 0; i--){
             caracteresnum[i + ceros] = caracteresnum[i];
         }
         for(int i = 0; i < ceros; i++){
             caracteresnum[i] = '0';
         }
+        caracteresnum[longitud + ceros] = '\0';
     }
+    cout << "Original: " << original << ". " << endl;
+    for(int i = 0; i < longitud; i += N){
+        for(int k = 0; k < N; k++){
+            division[k] = caracteresnum[i + k];
+        }
+        division[N] = '\0';
+        suma += atoi(division);
+    }
+    cout << "Suma: " << suma << "." << endl;
 }
 
 void problema10()
@@ -348,7 +442,7 @@ void problema10()
 
 void problema10arduino()
 {
-    void setup(){
+    /*/void setup(){
         Serial.begin(9600);
         while(!Serial);
         String romano;
@@ -404,7 +498,7 @@ void problema10arduino()
     }
     void loop(){
 
-    }
+    }/*/
 }
 
 void problema11()
@@ -854,9 +948,9 @@ void problema17()
     }
 }
 
-void problema17arduino()
-{
-    void setup() {
+//void problema17arduino()
+//{
+    /*/void setup() {
         Serial.begin(9600);
         while (!Serial);
 
@@ -904,7 +998,7 @@ void problema17arduino()
     void loop() {
 
     }
-}
+}/*/
 
 void problema18()
 {
