@@ -1,11 +1,13 @@
 #include <iostream>
 using namespace std;
 #include <cstring>
-#include <iomanip>
+#include <iomanip> //espaciado matriz problema14
+#include <cstdlib>
+#include <ctime>
 
 void problema1();//
 
-void problema2();//pendiente//
+void problema2();//
 
 bool problema3();//
 
@@ -23,6 +25,7 @@ void problema8puntero();//
 void problema9();//pendiente//
 
 void problema10();//
+void problema10arduino();//
 
 void problema11();//
 
@@ -32,19 +35,20 @@ void problema13();//
 
 void problema14();//
 
-void problema15();
+void problema15();//
 
-void problema16();
+void problema16();//------------
 
-void problema17();
+void problema17();//
+void problema17arduino();//
 
-void problema18();
+void problema18();//
 
 
 
 int main()
 {
-    problema15();
+    problema2();
     return 0;
 }
 
@@ -75,16 +79,21 @@ void problema1()
 void problema2()
 {
     char letras[200];
+    int repeticion[26] = {0};
+    srand(time(0)); //numero aleatorio
     for(int i = 0; i < 200; i++){
-        letras[i] = 'A' + (i*7+3*i*i) % 26;
+        letras[i] = 'A' + rand() % 26;
+        repeticion[letras[i] - 'A']++;
     }
     cout << "Arreglo: ";
-    for(int i = 0; i < 200; i++){//************PENDIENTE***************
+    for(int i = 0; i < 200; i++){
         cout << letras[i];
     }
     cout << endl;
-    for(int i = 0; i < 200; i++){
-        cout << letras[i] << ": " << i << endl;;
+    for(int i = 0; i < 26; i++){
+        if(repeticion[i] > 0){
+            cout << char('A' + i) << ": " << repeticion[i] << endl;
+        }
     }
 }
 
@@ -250,7 +259,7 @@ void problema8puntero()
     delete[] numeros;
 }
 
-/*/void problema9()
+void problema9()
 {
     int N, suma=0;
     char caracteresnum[100];
@@ -280,7 +289,7 @@ void problema8puntero()
             caracteresnum[i] = '0';
         }
     }
-}/*/
+}
 
 void problema10()
 {
@@ -335,6 +344,67 @@ void problema10()
     cout << "El numero ingresado fue: "<< romano << endl ;
     cout << "Que corresponde a: " << total << endl;
     //return 0;
+}
+
+void problema10arduino()
+{
+    void setup(){
+        Serial.begin(9600);
+        while(!Serial);
+        String romano;
+        int total = 0;
+        Serial.println("Ingrese un numero romano: ");
+        while(Serial.available() == 0);
+        romano = Serial.readString();
+        for(int i = 0; i < romano.length(); i++){
+            int caracter = 0;
+            int caractersiguiente = 0;
+            if(romano[i] = 'M' || romano[i] == 'm'){
+                caracter = 1000;
+            }else if(romano[i] == 'D' || romano[i] == 'd'){
+                caracter = 500;
+            }else if(romano[i] == 'C' || romano[i] == 'c'){
+                caracter = 100;
+            }else if(romano[i] == 'L' || romano[i] == 'l'){
+                caracter = 50;
+            }else if(romano[i] == 'X' || romano[i] == 'x'){
+                caracter = 10;
+            }else if(romano[i] == 'V' || romano[i] == 'v'){
+                caracter = 5;
+            }else if(romano[i] == 'I' || romano[i] == 'i'){
+                caracter = 1;
+            }
+            if(i + 1 < romano.length()){
+                if(romano[i + 1] == 'M' || romano[i + 1] == 'm'){
+                    caractersiguiente = 1000;
+                }else if(romano[i + 1] == 'D' || romano[i + 1] == 'd'){
+                    caractersiguiente = 500;
+                }else if(romano[i + 1] == 'C' || romano[i + 1] == 'c'){
+                    caractersiguiente = 100;
+                }else if(romano[i + 1] == 'L' || romano[i + 1] == 'l'){
+                    caractersiguiente = 50;
+                }else if(romano[i + 1] == 'X' || romano[i + 1] == 'x'){
+                    caractersiguiente = 10;
+                }else if(romano[i + 1] == 'V' || romano[i + 1] == 'v'){
+                    caractersiguiente = 5;
+                }else if(romano[i + 1] == 'I' || romano[i + 1] == 'i'){
+                    caractersiguiente = 1;
+                }
+            }
+            if(caracter < caractersiguiente){
+                total -= caracter;
+            }else {
+                total += caracter;
+            }
+        }
+        Serial.print("El numero ingresado fue: ");
+        Serial.println(romano);
+        Serial.print("Que corresponde a : ");
+        Serial.println(total);
+    }
+    void loop(){
+
+    }
 }
 
 void problema11()
@@ -719,5 +789,146 @@ void problema15()
 
 void problema16()
 {
+    int N, caminos;
+    cout << "Ingrese un numero: ";
+    cin >> N;
+    int **matriz = new int*[N];
+    for(int i = 0; i < N; i++){
+        matriz[i] = new int[N];
+        for(int j = 0; j < N; j++){
+            matriz[i][j] = 0;
+        }
+    }
+    matriz[0][0] = 1;
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            if(i > 0 || j > 0){
+                if(i > 0){
+                    matriz[i][j] += matriz[i-1][j];
+                }
+                if(j > 0){
+                    matriz[i][j] += matriz[i][j-1];
+                }
+            }
+        }
+    }
+    caminos = matriz[N - 1][N - 1];
+    for(int i = 0; i < N; i++){
+        delete[] matriz[i];
+    }
+    delete[] matriz;
+    cout << "Para una malla de " << N << "x" << N << " puntos hay " << caminos << " caminos" << endl;
+}
 
+void problema17()
+{
+    int N, sumaT = 0;
+    bool encontrado = false;
+    cout << "Ingrese un numero: ";
+    cin >> N;
+    for(int i = 0; i < N; i++){
+        int sumaDdn = 0;
+        for(int j = 1; j <= i / 2; j++){
+            if(i % j == 0){
+                sumaDdn += j;
+            }
+        }
+        if(sumaDdn > i && sumaDdn < N){
+            int sumadivisores = 0;
+            for(int k = 1; k <= sumaDdn / 2; k++){
+                if(sumaDdn % k == 0){
+                    sumadivisores += k;
+                }
+            }
+            if(sumadivisores == i){
+                cout << "Amigables: " << i << " y " << sumaDdn << endl;
+                sumaT += i + sumaDdn;
+                encontrado = true;
+            }
+        }
+    }
+    if(encontrado){
+        cout << "El resulatado de la suma es: " << sumaT << endl;
+    }else {
+        cout << "No hay numeros amigables menores a " << N << endl;
+    }
+}
+
+void problema17arduino()
+{
+    void setup() {
+        Serial.begin(9600);
+        while (!Serial);
+
+        int N = 0, sumaT = 0;
+        bool encontrado = false;
+
+        Serial.println("Ingrese un numero: ");
+        while (Serial.available() == 0);
+        N = Serial.parseInt();
+
+        for (int i = 1; i < N; i++) {
+            int sumaDdn = 0;
+            for (int j = 1; j <= i / 2; j++) {
+                if (i % j == 0) {
+                    sumaDdn += j;
+                }
+            }
+            if (sumaDdn > i && sumaDdn < N) {
+                int sumadivisores = 0;
+                for (int k = 1; k <= sumaDdn / 2; k++) {
+                    if (sumaDdn % k == 0) {
+                        sumadivisores += k;
+                    }
+                }
+
+                if (sumadivisores == i) {
+                    Serial.print("Amigables: ");
+                    Serial.print(i);
+                    Serial.print(" y ");
+                    Serial.println(sumaDdn);
+                    sumaT += i + sumaDdn;
+                    encontrado = true;
+                }
+            }
+        }
+        if (encontrado) {
+            Serial.print("El resultado de la suma es: ");
+            Serial.println(sumaT);
+        } else {
+            Serial.print("No hay numeros amigables menores a ");
+            Serial.println(N);
+        }
+    }
+
+    void loop() {
+
+    }
+}
+
+void problema18()
+{
+    int N;
+    cout << "Ingrese un numero: ";
+    cin >> N;
+    int numeros[10] = {0,1,2,3,4,5,6,7,8,9};
+    int tamaño = 10;
+    char permutacion[11];
+    int copiaN = N;
+    N--;
+    for(int i = 9; i >= 0; i--){
+        int factorial = 1;
+        for(int j = 2; j <= i; j++){
+            factorial *= j;
+        }
+        int x = N / factorial;
+        permutacion[9 - i] = '0' + numeros[x];
+        for (int j = x; j < tamaño - 1; j++) {
+            numeros[j] = numeros[j + 1];
+        }
+        tamaño--;
+        N = N % factorial;
+    }
+    permutacion[10] = '\0';
+    cout << "La permutacion numero " << copiaN << " es: " << permutacion << endl;
 }
