@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include <cstring>
+#include <iomanip>
 
 void problema1();//
 
@@ -19,17 +20,17 @@ void problema7();//
 void problema8();//
 void problema8puntero();//
 
-void problema9();
+void problema9();//pendiente//
 
 void problema10();//
 
-void problema11();
+void problema11();//
 
-void problema12();
+bool problema12();//
 
-void problema13();
+void problema13();//pendiente//
 
-void problema14();
+void problema14();//
 
 void problema15();
 
@@ -43,7 +44,7 @@ void problema18();
 
 int main()
 {
-    problema11();
+    problema15();
     return 0;
 }
 
@@ -422,4 +423,221 @@ void problema11()
                 cout << "Opcion no valida" << endl;
         }
     } while(opcion != '4');
+}
+
+bool problema12()
+{
+    int N;
+    cout << "Ingrese un numero que defina el tamaño: ";
+    cin >> N;
+    if(N <= 1){
+        cout << "Tamaño de la matriz invalido";
+        return 1;
+    }
+    int **matriz = new int*[N];
+    for(int i = 0; i < N; i++){
+        matriz[i] = new int[N];
+    }
+    for(int i = 0; i < N; i++){
+        cout << "Ingrese el contenido de la fila " << i + 1 << " separada por espacios: ";
+        for(int j =0; j < N; j++){
+            cin >> matriz[i][j];
+            //cout << matriz[i][j];
+        }
+    }
+    cout << endl;
+    cout << "Matriz: " << endl;
+    for(int i = 0; i < N; i++){
+        for(int j =0; j < N; j++){
+            cout << "  " << matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+    int suma = 0;
+    bool *numerosM = new bool[N * N + 1];
+    for(int i = 0; i <= N * N; i++){
+        numerosM[i] = false;
+    }
+    for(int j = 0; j < N; j++){//sumar primera fila
+        int num = matriz[0][j];
+        suma += num;
+        if(num <= 0 || num > N * N || numerosM[num]){
+            cout << endl;
+            cout << "La matriz ingresada No es un cuuadrado magico" << endl;
+            delete[] numerosM;
+            for(int i = 0; i < N; i++){
+                delete[] matriz[i];
+            }
+            delete[] matriz;
+            return 0;
+        }
+        numerosM[num] = true;
+    }
+    for(int i = 1; i < N; i++){
+        for(int j = 0; j < N; j++){
+            int num = matriz[i][j];
+            if(num <= 0 || num > N * N || numerosM[num]){
+                cout << endl;
+                cout << "La matriz ingresada No es un cuuadrado magico" << endl;
+                delete[] numerosM;
+                for(int i = 0; i < N; i++){
+                    delete[] matriz[i];
+                }
+                delete[] matriz;
+                return 0;
+            }
+            numerosM[num] = true;
+        }
+    }
+    for(int i = 0; i < N; i++){//filas
+        int sumafilas = 0;
+        for(int j = 0; j < N; j++){
+            sumafilas += matriz[i][j];
+        }
+        if(sumafilas != suma){
+            cout << endl;
+            cout << "La matriz ingresada No es un cuuadrado magico" << endl;
+            delete[] numerosM;
+            for(int i = 0; i < N; i++){
+                delete[] matriz[i];
+            }
+            delete[] matriz;
+            return 0;
+        }
+    }
+    for(int j = 0; j < N; j++){//columnas
+        int sumacolumnas = 0;
+        for(int i = 0; i < N; i++){
+            sumacolumnas += matriz[i][j];
+        }
+        if(sumacolumnas != suma){
+            cout << endl;
+            cout << "La matriz ingresada No es un cuuadrado magico" << endl;
+            delete[] numerosM;
+            for(int i = 0; i < N; i++){
+                delete[] matriz[i];
+            }
+            delete[] matriz;
+            return 0;
+        }
+    }
+    int sumadiagonal1 = 0, sumadiagonal2 = 0;//diagonales
+    for(int i = 0; i < N; i++){
+        sumadiagonal1 += matriz[i][i];
+        sumadiagonal2 += matriz[i][N - 1 - i];
+    }
+    if(sumadiagonal1 != suma || sumadiagonal2 != suma){
+        cout << endl;
+        cout << "La matriz ingresada No es un cuuadrado magico" << endl;
+        for(int i = 0; i < N; i++){
+            delete[] matriz[i];
+        }
+        delete[] matriz;
+        return 0;
+    }
+    delete[] numerosM;
+    cout << endl;
+    cout << "La matriz ingresada es un cuadrado magico" << endl;
+    for(int i = 0; i < N; i++){
+        delete[] matriz[i];
+    }
+    delete[] matriz;
+    return 0;
+}
+
+void problema13()
+{
+    //pendiente
+}
+
+void problema14()
+{
+    int N = 5;
+    int matriz[N][N];
+    int rotada90[N][N];
+    int rotada180[N][N];
+    int rotada270[N][N];
+    int valor = 1;
+    char opcion;
+    for(int i = 0; i < N; i++){
+        for(int j = 0; j < N; j++){
+            matriz[i][j] = valor++;
+        }
+    }
+    cout << endl;
+    cout << "Matriz original: " << endl;
+    for (int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++){
+            cout << " " << setw(3) << matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+    do {
+        cout << "1. Rotar 90°" << endl;
+        cout << "2. Rotar 180°" << endl;
+        cout << "3. Rotar 270°" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Elija una opcion: ";
+        cin >> opcion;
+        switch(opcion){
+            case '1':{
+                cout << endl;
+                cout << "Matriz rotado 90°: " << endl;
+                for(int  i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        rotada90[j][N - 1 - i] = matriz[i][j];
+                    }
+                }
+                for(int i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        cout << " " << setw(3) << rotada90[i][j] << " ";
+                    }
+                    cout << endl;
+                }
+                break;
+            }
+            case '2':{
+                cout << endl;
+                cout << "Matriz rotada 180: " << endl;
+                for(int i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        rotada180[N - 1 - i][N - 1 - j] = matriz[i][j];
+                    }
+                }
+                for(int i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        cout << " " << setw(3) << rotada180[i][j] << " ";
+                    }
+                    cout << endl;
+                }
+                break;
+            }
+            case '3':{
+                cout << endl;
+                cout << "Matriz rotada 270: " << endl;
+                for(int i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        rotada270[N - 1 - j][i] = matriz[i][j];
+                    }
+                }
+                for(int i = 0; i < N; i++){
+                    for(int j = 0; j < N; j++){
+                        cout << " " << setw(3) << rotada270[i][j] << " ";
+                    }
+                    cout << endl;
+                }
+                break;
+            }
+            case '4':
+                cout << ">>>>Saliendo<<<<" << endl;
+                break;
+            default:
+                cout << "Opcion no valida" << endl;
+        }
+    }while(opcion != '4');
+}
+
+void problema15()
+{
+
 }
