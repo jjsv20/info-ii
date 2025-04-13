@@ -21,7 +21,7 @@ void problema8puntero();//
 
 void problema9();
 
-void problema10();
+void problema10();//
 
 void problema11();
 
@@ -43,7 +43,7 @@ void problema18();
 
 int main()
 {
-    problema10();
+    problema11();
     return 0;
 }
 
@@ -338,5 +338,88 @@ void problema10()
 
 void problema11()
 {
+    char sala[15][20];
+    char opcion;
+    char fila;
+    int asiento;
+    for(int i = 0; i < 15; i++){
+        for(int j = 0; j < 20; j++){
+            sala[i][j] = '-';
 
+        }
+    }
+    do {
+        cout << "1. Resaervar asiento" << endl;
+        cout << "2. Cancelar reserva" << endl;
+        cout << "3. Ver salar" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Elige la opcion que desees: ";
+        cin >> opcion;
+        switch(opcion){
+            case '1':{
+                cout << "Ingrese la fila. (Ej. 'A'): ";
+                cin >> fila;
+                fila = toupper(fila);
+                cout << "Ingrese el numero de asiento (de 1 a 20): ";
+                cin >> asiento;
+                int i = fila - 'A';
+                int j = asiento - 1;
+                if(i >= 0 && i < 15 && j >= 0 && j < 20){
+                    if(sala[i][j] == '-'){
+                        sala[i][j] = '+';
+                        cout << "Asiento reservado exitosamente.";
+                    }else {
+                        cout << "Este asiento ya se encuentra reservado";
+                    }
+                }else{
+                    cout << "Asiento no encontrado";
+                }
+                break;
+            }
+            case '2':{
+                cout << "Ingrese la fila. (Ej. 'A'): ";
+                cin >> fila;
+                fila = toupper(fila);
+                cout << "Ingrese el numero de asiento (de 1 a 20): ";
+                cin >> asiento;
+                int i = fila - 'A';
+                int j = asiento - 1;
+                if(i >= 0 && i < 15 && j >= 0 && j < 20){
+                    if(sala[i][j] == '+'){
+                        sala[i][j] = '-';
+                        cout << "Reserva cancelada exitosamente.";
+                    }else {
+                        cout << "Este asiento se encuentra disponible. NO esta reservado";
+                    }
+                }else{
+                    cout << "Asiento no encontrado";
+                }
+                break;
+            }
+            case '3':{
+                cout << "\n  ";
+                for(int j = 1; j <= 20; j++){
+                    if(j < 10) {
+                        cout << " " << j << " ";
+                    }else {
+                        cout << j << " ";
+                    }
+                }
+                cout << endl;
+                for(int i = 0; i < 15; i++){
+                    cout << char('A' + i) << " ";
+                    for(int j = 0; j < 20; j++){
+                        cout << " " << sala[i][j] << " ";
+                    }
+                    cout << endl;
+                }
+                break;
+            }
+            case '4':
+                cout << ">>>>Saliendo<<<<" << endl;
+                break;
+            default:
+                cout << "Opcion no valida" << endl;
+        }
+    } while(opcion != '4');
 }
