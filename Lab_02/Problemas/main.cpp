@@ -286,7 +286,7 @@ void problema7()
         while(*q){
             if(*q != *p){
                 *k = *q;
-                *k++;
+                k++;
             }
             q++;
         }
@@ -380,6 +380,7 @@ void problema9()
             division[k] = caracteresnum[i + k];
         }
         division[N] = '\0';
+        cout << "Grupo: " << division << endl;
         suma += atoi(division);
     }
     cout << "Suma: " << suma << "." << endl;
