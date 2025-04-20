@@ -39,7 +39,6 @@ void problema15();//
 void problema16();//
 
 void problema17();//
-void problema17arduino();//
 
 void problema18();//
 
