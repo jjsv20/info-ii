@@ -50,7 +50,7 @@ void problema18();//
 
 int main()
 {
-    problema9();
+    problema12();
     return 0;
 }
 
@@ -380,9 +380,12 @@ void problema9()
             division[k] = caracteresnum[i + k];
         }
         division[N] = '\0';
-        cout << "Grupo: " << division << endl;
+        cout << division;
+        if (i + N < strlen(caracteresnum)) cout << " + ";
+        //cout << endl;
         suma += atoi(division);
     }
+    cout << endl;
     cout << "Suma: " << suma << "." << endl;
 }
 
@@ -392,11 +395,13 @@ void problema10()
     string romano;
     cout << "Ingrese un numero romano: ";
     cin >> romano;
+    for (int i = 0; i < romano.length(); i++) {
+        romano[i] = toupper(romano[i]);
+    }
     for(int i = 0; i < romano.length(); i++){
         int caracter = 0;
         int caractersiguiente = 0;
         if(romano[i] == 'M'){
-            romano[i] += 32;
             caracter = 1000;
         } else if(romano[i] == 'D'){
             caracter = 500;
@@ -413,7 +418,6 @@ void problema10()
         }
         if(i + 1 < romano.length()){
             if(romano[i + 1] == 'M'){
-                romano[i] += 32;
                 caractersiguiente = 1000;
             } else if(romano[i + 1] == 'D'){
                 caractersiguiente = 500;
@@ -597,7 +601,7 @@ bool problema12()
     cin >> N;
     if(N <= 1){
         cout << "Tamaño de la matriz invalido";
-        return 1;
+        return false;
     }
     int **matriz = new int*[N];
     for(int i = 0; i < N; i++){
@@ -634,7 +638,7 @@ bool problema12()
                 delete[] matriz[i];
             }
             delete[] matriz;
-            return 0;
+            return false;
         }
         numerosM[num] = true;
     }
@@ -649,7 +653,7 @@ bool problema12()
                     delete[] matriz[i];
                 }
                 delete[] matriz;
-                return 0;
+                return false;
             }
             numerosM[num] = true;
         }
@@ -667,7 +671,7 @@ bool problema12()
                 delete[] matriz[i];
             }
             delete[] matriz;
-            return 0;
+            return false;
         }
     }
     for(int j = 0; j < N; j++){//columnas
@@ -683,7 +687,7 @@ bool problema12()
                 delete[] matriz[i];
             }
             delete[] matriz;
-            return 0;
+            return false;
         }
     }
     int sumadiagonal1 = 0, sumadiagonal2 = 0;//diagonales
@@ -698,7 +702,7 @@ bool problema12()
             delete[] matriz[i];
         }
         delete[] matriz;
-        return 0;
+        return false;
     }
     delete[] numerosM;
     cout << endl;
@@ -707,7 +711,7 @@ bool problema12()
         delete[] matriz[i];
     }
     delete[] matriz;
-    return 0;
+    return true;
 }
 
 const int filas = 6;
