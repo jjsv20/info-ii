@@ -6,7 +6,6 @@ using namespace std;
 #include <ctime>
 
 void problema1();//
-void problema1arduino();
 
 void problema2();//
 
@@ -17,7 +16,6 @@ void problema4();//
 void problema5();//
 
 void problema6();//
-void problema6arduino();
 
 void problema7();//
 
@@ -27,7 +25,6 @@ void problema8puntero();//
 void problema9();//
 
 void problema10();//
-void problema10arduino();//
 
 void problema11();//
 
@@ -39,7 +36,7 @@ void problema14();//
 
 void problema15();//
 
-void problema16();//-----
+void problema16();//
 
 void problema17();//
 void problema17arduino();//
@@ -50,7 +47,7 @@ void problema18();//
 
 int main()
 {
-    problema12();
+    problema10();
     return 0;
 }
 
@@ -78,56 +75,52 @@ void problema1()
     }
 }
 
-/*/void problema1arduino()
-{
-    void setup() {
-        Serial.begin(9600);
-        while (!Serial);
-        long cantidad, billetesUsados, monedasUsadas;
-        long billetes[6] = {50000, 20000, 10000, 5000, 2000, 1000};
-        long monedas[4] = {500, 200, 100, 50};
-        Serial.println("Ingrese una cantidad de dinero (positivo): ");
 
-        while (Serial.available() == 0) {
-
-        }
-        cantidad = Serial.parseInt();
+/*/void setup() {//Problema 1 - Arduino
+    Serial.begin(9600);
+    while (!Serial);
+    long cantidad, billetesUsados, monedasUsadas;
+    long billetes[6] = {50000, 20000, 10000, 5000, 2000, 1000};
+    long monedas[4] = {500, 200, 100, 50};
+    Serial.println("Ingrese una cantidad de dinero (positivo): ");
+    while (Serial.available() == 0) {
+    }
+    cantidad = Serial.parseInt();
+    if (cantidad <= 0) {
+        Serial.println("Por favor, ingrese una cantidad positiva.");
+        return;
+    }
+    for (int i = 0; i < 6; i++) {
+        billetesUsados = cantidad / billetes[i];
+        Serial.print(billetes[i]);
+        Serial.print(": ");
+        Serial.println(billetesUsados);
+        cantidad = cantidad % billetes[i];
         if (cantidad <= 0) {
-            Serial.println("Por favor, ingrese una cantidad positiva.");
-            return;
+            break;
         }
-
-        for (int i = 0; i < 6; i++) {
-            billetesUsados = cantidad / billetes[i];
-            Serial.print(billetes[i]);
+    }
+    if (cantidad > 0) {
+        for (int j = 0; j < 4; j++) {
+            monedasUsadas = cantidad / monedas[j];
+            Serial.print(monedas[j]);
             Serial.print(": ");
-            Serial.println(billetesUsados);
-            cantidad = cantidad % billetes[i];
+            Serial.println(monedasUsadas);
+            cantidad = cantidad % monedas[j];
             if (cantidad <= 0) {
                 break;
             }
         }
-        if (cantidad > 0) {
-            for (int j = 0; j < 4; j++) {
-                monedasUsadas = cantidad / monedas[j];
-                Serial.print(monedas[j]);
-                Serial.print(": ");
-                Serial.println(monedasUsadas);
-
-                cantidad = cantidad % monedas[j];
-                if (cantidad <= 0) {
-                    break;
-                }
-            }
-        }
-        if (cantidad > 0) {
-            Serial.print("Faltante: ");
-            Serial.println(cantidad);
-        }
-
-    void loop() {
     }
+    if (cantidad > 0) {
+        Serial.print("Faltante: ");
+        Serial.println(cantidad);
+    }
+}
+void loop() {
+    //solo se ejcuta una vez
 }/*/
+
 
 void problema2()
 {
@@ -230,39 +223,38 @@ void problema6()
     cout << "Original: " << cadenacopia << ". En mayuscula: " << cadena_caracteres << endl;
 }
 
-/*/void problema6arduino()
-{
-    void setup(){
-        Serial.begin(9600);
-        while(!Serial);
-        char candena_caracteres[100];
-        char cadenacopia[100];
-        int indice = 0;
-        Serial.println("Ingrese una cadena: ");
-        while(Serial.available() == 0){
-        }
-        while(Serial.available() > 0 && indice < 99){
-            char c = Serial.read();
-            if(c = '\n' || c == '\r') {
-                break;
-            }
-            cadena_caracteres[indice++] = c;
-            delay(10);
-        }
-        cadena_caracteres[indice] = '\0';
-        strcpy(cadenacopia,cadena_caracteres);
-        for(int i = 0; 1 < strlen(cadena_caracteres); i++){
-            if(cadena_caracteres[i] >= 'a' && cadena_caracteres[i] <= 'z'){
-                cadena_caracteres[i] -= 32;
-            }
-        }
-        Serial.print("Original: ");
-        Serial.println(cadenacopia),
-        Serial.print(". En mayuscula: ");
-        Serial.println(cadena_caracteres);
+
+/*/void setup(){Problema 6 - Arduino
+    Serial.begin(9600);
+    while(!Serial);
+    char candena_caracteres[100];
+    char cadenacopia[100];
+    int indice = 0;
+    Serial.println("Ingrese una cadena: ");
+    while(Serial.available() == 0){
     }
-    void loop(){
+    while(Serial.available() > 0 && indice < 99){
+        char c = Serial.read();
+        if(c = '\n') {
+            break;
+        }
+        cadena_caracteres[indice++] = c;
+        delay(10);
     }
+    cadena_caracteres[indice] = '\0';
+    strcpy(cadenacopia,cadena_caracteres);
+    for(int i = 0; i < strlen(cadena_caracteres); i++){
+        if(cadena_caracteres[i] >= 'a' && cadena_caracteres[i] <= 'z'){
+            cadena_caracteres[i] -= 32;
+        }
+    }
+    Serial.print("Original: ");
+    Serial.println(cadenacopia);
+    Serial.print(". En mayuscula: ");
+    Serial.println(cadena_caracteres);
+}
+void loop(){
+    //solo se ejecuta una vez
 }/*/
 
 void problema7()
@@ -445,66 +437,67 @@ void problema10()
     //return 0;
 }
 
-void problema10arduino()
-{
-    /*/void setup(){
-        Serial.begin(9600);
-        while(!Serial);
-        String romano;
-        int total = 0;
-        Serial.println("Ingrese un numero romano: ");
-        while(Serial.available() == 0);
-        romano = Serial.readString();
-        for(int i = 0; i < romano.length(); i++){
-            int caracter = 0;
-            int caractersiguiente = 0;
-            if(romano[i] = 'M' || romano[i] == 'm'){
-                caracter = 1000;
-            }else if(romano[i] == 'D' || romano[i] == 'd'){
-                caracter = 500;
-            }else if(romano[i] == 'C' || romano[i] == 'c'){
-                caracter = 100;
-            }else if(romano[i] == 'L' || romano[i] == 'l'){
-                caracter = 50;
-            }else if(romano[i] == 'X' || romano[i] == 'x'){
-                caracter = 10;
-            }else if(romano[i] == 'V' || romano[i] == 'v'){
-                caracter = 5;
-            }else if(romano[i] == 'I' || romano[i] == 'i'){
-                caracter = 1;
-            }
-            if(i + 1 < romano.length()){
-                if(romano[i + 1] == 'M' || romano[i + 1] == 'm'){
-                    caractersiguiente = 1000;
-                }else if(romano[i + 1] == 'D' || romano[i + 1] == 'd'){
-                    caractersiguiente = 500;
-                }else if(romano[i + 1] == 'C' || romano[i + 1] == 'c'){
-                    caractersiguiente = 100;
-                }else if(romano[i + 1] == 'L' || romano[i + 1] == 'l'){
-                    caractersiguiente = 50;
-                }else if(romano[i + 1] == 'X' || romano[i + 1] == 'x'){
-                    caractersiguiente = 10;
-                }else if(romano[i + 1] == 'V' || romano[i + 1] == 'v'){
-                    caractersiguiente = 5;
-                }else if(romano[i + 1] == 'I' || romano[i + 1] == 'i'){
-                    caractersiguiente = 1;
-                }
-            }
-            if(caracter < caractersiguiente){
-                total -= caracter;
-            }else {
-                total += caracter;
+/*/void setup(){//Problema 10 - Arduino
+    Serial.begin(9600);
+    while(!Serial);
+    String romano;
+    int total = 0;
+    Serial.println("Ingrese un numero romano: ");
+    while(Serial.available() == 0);
+    romano = Serial.readString();
+    for (int i = 0; i < romano.length(); i++) {
+        romano[i] = toupper(romano[i]);
+    }
+    for(int i = 0; i < romano.length(); i++){
+        int caracter = 0;
+        int caractersiguiente = 0;
+        if(romano[i] == 'M'){
+            caracter = 1000;
+        }else if(romano[i] == 'D'){
+            caracter = 500;
+        }else if(romano[i] == 'C'){
+            caracter = 100;
+        }else if(romano[i] == 'L'){
+            caracter = 50;
+        }else if(romano[i] == 'X'){
+            caracter = 10;
+        }else if(romano[i] == 'V'){
+            caracter = 5;
+        }else if(romano[i] == 'I'){
+            caracter = 1;
+        }
+        if(i + 1 < romano.length()){
+            if(romano[i + 1] == 'M'){
+                caractersiguiente = 1000;
+            }else if(romano[i + 1] == 'D'){
+                caractersiguiente = 500;
+            }else if(romano[i + 1] == 'C'){
+                caractersiguiente = 100;
+            }else if(romano[i + 1] == 'L'){
+                caractersiguiente = 50;
+            }else if(romano[i + 1] == 'X'){
+                caractersiguiente = 10;
+            }else if(romano[i + 1] == 'V'){
+                caractersiguiente = 5;
+            }else if(romano[i + 1] == 'I'){
+                caractersiguiente = 1;
             }
         }
-        Serial.print("El numero ingresado fue: ");
-        Serial.println(romano);
-        Serial.print("Que corresponde a : ");
-        Serial.println(total);
+        if(caracter < caractersiguiente){
+            total -= caracter;
+        }else {
+            total += caracter;
+        }
     }
-    void loop(){
-
-    }/*/
+    Serial.print("El numero ingresado fue: ");
+    Serial.println(romano);
+    Serial.print("Que corresponde a : ");
+    Serial.println(total);
 }
+void loop(){
+    //solo se ejecuta una vez
+}/*/
+
 
 void problema11()
 {
@@ -891,27 +884,18 @@ void problema16()
     int N, caminos;
     cout << "Ingrese un numero: ";
     cin >> N;
-    int **matriz = new int*[N];
-    for(int i = 0; i < N; i++){
-        matriz[i] = new int[N];
-        for(int j = 0; j < N; j++){
-            matriz[i][j] = 0;
-        }
-    }
-    matriz[0][0] = 1;
-    for(int i = 0; i < N; i++){
-        for(int j = 0; j < N; j++){
-            if(i > 0 || j > 0){
-                if(i > 0){
-                    matriz[i][j] += matriz[i-1][j];
-                }
-                if(j > 0){
-                    matriz[i][j] += matriz[i][j-1];
-                }
+    int **matriz = new int*[N + 1];
+    for(int i = 0; i <= N; i++){
+        matriz[i] = new int[N + 1];
+        for(int j = 0; j <= N; j++){
+            if(i == 0 || j == 0){
+                matriz[i][j] = 1;
+            } else{
+                matriz[i][j] = matriz[i - 1][j] + matriz[i][j - 1];
             }
         }
     }
-    caminos = matriz[N - 1][N - 1];
+    caminos = matriz[N][N];
     for(int i = 0; i < N; i++){
         delete[] matriz[i];
     }
@@ -925,23 +909,23 @@ void problema17()
     bool encontrado = false;
     cout << "Ingrese un numero: ";
     cin >> N;
-    for(int i = 0; i < N; i++){
-        int sumaDdn = 0;
+    for(int i = 1; i < N; i++){
+        int sumaX = 0;
         for(int j = 1; j <= i / 2; j++){
             if(i % j == 0){
-                sumaDdn += j;
+                sumaX += j;
             }
         }
-        if(sumaDdn > i && sumaDdn < N){
+        if(sumaX > i && sumaX < N){
             int sumadivisores = 0;
-            for(int k = 1; k <= sumaDdn / 2; k++){
-                if(sumaDdn % k == 0){
+            for(int k = 1; k <= sumaX / 2; k++){
+                if(sumaX % k == 0){
                     sumadivisores += k;
                 }
             }
             if(sumadivisores == i){
-                cout << "Amigables: " << i << " y " << sumaDdn << endl;
-                sumaT += i + sumaDdn;
+                cout << "Amigables: " << i << " y " << sumaX << endl;
+                sumaT += i + sumaX;
                 encontrado = true;
             }
         }
@@ -953,56 +937,49 @@ void problema17()
     }
 }
 
-//void problema17arduino()
-//{
-    /*/void setup() {
-        Serial.begin(9600);
-        while (!Serial);
 
-        int N = 0, sumaT = 0;
-        bool encontrado = false;
-
-        Serial.println("Ingrese un numero: ");
-        while (Serial.available() == 0);
-        N = Serial.parseInt();
-
-        for (int i = 1; i < N; i++) {
-            int sumaDdn = 0;
-            for (int j = 1; j <= i / 2; j++) {
-                if (i % j == 0) {
-                    sumaDdn += j;
-                }
-            }
-            if (sumaDdn > i && sumaDdn < N) {
-                int sumadivisores = 0;
-                for (int k = 1; k <= sumaDdn / 2; k++) {
-                    if (sumaDdn % k == 0) {
-                        sumadivisores += k;
-                    }
-                }
-
-                if (sumadivisores == i) {
-                    Serial.print("Amigables: ");
-                    Serial.print(i);
-                    Serial.print(" y ");
-                    Serial.println(sumaDdn);
-                    sumaT += i + sumaDdn;
-                    encontrado = true;
-                }
+/*/void setup() {//Problema 17 - Arduino
+    Serial.begin(9600);
+    while (!Serial);
+    int N = 0, sumaT = 0;
+    bool encontrado = false;
+    Serial.println("Ingrese un numero: ");
+    while (Serial.available() == 0);
+    N = Serial.parseInt();
+    for (int i = 1; i < N; i++) {
+        int sumaDdn = 0;
+        for (int j = 1; j <= i / 2; j++) {
+            if (i % j == 0) {
+                sumaDdn += j;
             }
         }
-        if (encontrado) {
-            Serial.print("El resultado de la suma es: ");
-            Serial.println(sumaT);
-        } else {
-            Serial.print("No hay numeros amigables menores a ");
-            Serial.println(N);
+        if (sumaDdn > i && sumaDdn < N) {
+            int sumadivisores = 0;
+            for (int k = 1; k <= sumaDdn / 2; k++) {
+                if (sumaDdn % k == 0) {
+                    sumadivisores += k;
+                }
+            }
+            if (sumadivisores == i) {
+                Serial.print("Amigables: ");
+                Serial.print(i);
+                Serial.print(" y ");
+                Serial.println(sumaDdn);
+                sumaT += i + sumaDdn;
+                encontrado = true;
+            }
         }
     }
-
-    void loop() {
-
+    if (encontrado) {
+        Serial.print("El resultado de la suma es: ");
+        Serial.println(sumaT);
+    } else {
+        Serial.print("No hay numeros amigables menores a ");
+        Serial.println(N);
     }
+}
+void loop() {
+
 }/*/
 
 void problema18()
