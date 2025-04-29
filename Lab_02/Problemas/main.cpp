@@ -46,7 +46,7 @@ void problema18();//
 
 int main()
 {
-    problema10();
+    problema7();
     return 0;
 }
 
