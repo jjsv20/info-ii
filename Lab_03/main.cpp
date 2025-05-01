@@ -8,37 +8,11 @@ void readByCharacter(const string& filename, string& binario);
 string convertirABinario(char ch);
 string codificarMetodo1(string binario);
 string codificarMetodo2(string binario);
+void ejercicio1();
 
 int main()
 {
-    //const string outFile = "ejemplo.txt";
-    string inFile;
-    string binario = "";
-    string codificado = "";
-     string codificado2 = "";
-
-    try {
-        cout << "Ingrese el nombre del archivo a leer: ";
-        cin >> inFile;
-
-        // Read the file using different methods
-        readByCharacter(inFile, binario);
-        cout << "El archivo en binario seria: " << binario << endl;
-
-        codificado = codificarMetodo1(binario);
-        cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
-
-        codificado2 = codificarMetodo2(binario);
-        cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
-
-    } catch (const ifstream::failure& e) {
-        cerr << "\nI/O Error: " << e.what() << endl;
-    } catch (const runtime_error& e) {
-        cerr << "\nError: " << e.what() << endl;
-    } catch (...) {
-        cerr << "\nUnknown error occurred while handling the file." << endl;
-    }
-
+    ejercicio1();
     return 0;
 }
 
@@ -79,7 +53,7 @@ string convertirABinario(char ch)
 
 string codificarMetodo1(string binario)
 {
-    int N;
+    size_t N;
     cout << "Ingrese el tamaño de los bloques: ";
     cin >> N;
     string codificado = "";
@@ -177,4 +151,66 @@ string codificarMetodo2(string binario)
         codificado2 += nuevo;
     }
     return codificado2;
+}
+
+void ejercicio1()
+{
+    char opcion;
+    string inFile;
+    string binario = "";
+    string codificado = "";
+    string codificado2 = "";
+    do {
+        cout << "\n==== Codificar archivos de Texto ====" << endl;
+        cout << "1. Primer Metodo." << endl;
+        cout << "2. Segundo Metodo." << endl;
+        cout << "3. Salir." << endl;
+        cout << "Seleccione el metodo para codificar: ";
+        cin >> opcion;
+        switch (opcion) {
+        case '1':
+            binario.clear();
+            codificado.clear();
+            try {
+                cout << "\nIngrese el nombre del archivo a leer: ";
+                cin >> inFile;
+                // Read the file using different methods
+                readByCharacter(inFile, binario);
+                cout << "El archivo en binario seria: " << binario << endl;
+                codificado = codificarMetodo1(binario);//Llamado Funcion Metodo 1
+                cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
+            } catch (const ifstream::failure& e) {
+                cerr << "\nI/O Error: " << e.what() << endl;
+            } catch (const runtime_error& e) {
+                cerr << "\nError: " << e.what() << endl;
+            } catch (...) {
+                cerr << "\nUnknown error occurred while handling the file." << endl;
+            }
+            break;
+        case '2':
+            binario.clear();
+            codificado2.clear();
+            try {
+                cout << "\nIngrese el nombre del archivo a leer: ";
+                cin >> inFile;
+                // Read the file using different methods
+                readByCharacter(inFile, binario);
+                cout << "El archivo en binario seria: " << binario << endl;
+                codificado2 = codificarMetodo2(binario);//Llamado Funcion Metodo 2
+                cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
+            } catch (const ifstream::failure& e) {
+                cerr << "\nI/O Error: " << e.what() << endl;
+            } catch (const runtime_error& e) {
+                cerr << "\nError: " << e.what() << endl;
+            } catch (...) {
+                cerr << "\nUnknown error occurred while handling the file." << endl;
+            }
+            break;
+        case '3':
+            cout << "Saliendo del programa." << endl;
+            break;
+        default:
+            cout << "Opcion no valida" << endl;
+        }
+    } while (opcion != '3');
 }
