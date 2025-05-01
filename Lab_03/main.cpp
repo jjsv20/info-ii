@@ -6,13 +6,31 @@ using namespace std;
 
 void readByCharacter(const string& filename, string& binario);
 string convertirABinario(char ch);
+char convertirATexto(string binario);
 string codificarMetodo1(string binario);
+string decodificarMetodo1(string binario);
 string codificarMetodo2(string binario);
+string decodificarMetodo2(string binario);
 void ejercicio1();
+void ejercicio2();
 
 int main()
 {
-    ejercicio1();
+    char opcion;
+    do {
+        cout << "\n======= MENÚ PRINCIPAL =======" << endl;
+        cout << "1. Codificar archivo" << endl;
+        cout << "2. Decodificar archivo" << endl;
+        cout << "3. Salir" << endl;
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+        switch (opcion) {
+        case '1': ejercicio1(); break;
+        //case '2': ejercicio2(); break;
+        case '3': cout << "Saliendo del programa..." << endl; break;
+        default: cout << "Opción inválida.\n"; break;
+        }
+    } while (opcion != '3');
     return 0;
 }
 
@@ -49,6 +67,17 @@ string convertirABinario(char ch)
     }
 
     return resultado;
+}
+
+char convertirATexto(string binario)
+{
+    int valorASCII = 0;
+    for(int i = 0; i < 8; i++){
+        if(binario[i] == '1'){
+            valorASCII += (1 << (7 - i));
+        }
+    }
+    return static_cast<char>(valorASCII);
 }
 
 string codificarMetodo1(string binario)
@@ -179,6 +208,14 @@ void ejercicio1()
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado = codificarMetodo1(binario);//Llamado Funcion Metodo 1
                 cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
+                ofstream archivoSalida("codificado1.txt");
+                if (archivoSalida.is_open()) {
+                    archivoSalida << codificado;
+                    archivoSalida.close();
+                    cout << "El resultado se guardo en codificado1.txt'" << endl;
+                } else {
+                    cerr << "No se pudo abrir el archivo para la codificacion." << endl;
+                }
             } catch (const ifstream::failure& e) {
                 cerr << "\nI/O Error: " << e.what() << endl;
             } catch (const runtime_error& e) {
@@ -198,6 +235,14 @@ void ejercicio1()
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado2 = codificarMetodo2(binario);//Llamado Funcion Metodo 2
                 cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
+                ofstream archivoSalida("codificado2.txt");
+                if (archivoSalida.is_open()) {
+                    archivoSalida << codificado2;
+                    archivoSalida.close();
+                    cout << "El resultado se guardó en codificado2.txt" << endl;
+                } else {
+                    cerr << "No se pudo abrir el archivo para la codificacion." << endl;
+                }
             } catch (const ifstream::failure& e) {
                 cerr << "\nI/O Error: " << e.what() << endl;
             } catch (const runtime_error& e) {
