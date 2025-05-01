@@ -78,24 +78,37 @@ string codificarMetodo1(string binario)
     cout << "Ingrese el tamaño de los bloques: ";
     cin >> N;
     string codificado = "";
-    string anterior = "";
+    //string anterior = "";
+    string conEspacios = "";
+    for(size_t i = 0; i < binario.length(); i++){
+        conEspacios += binario[i];
+        if((i + 1) % N == 0 && i < binario.length() - 1){
+            conEspacios += " ";
+        }
+    }
+    cout << "El archivo separado en bloques de " << N << " bits: " << conEspacios << endl;
+
     for(size_t i = 0; i < binario.length(); i += N){
         string bloque = binario.substr(i,N);
-        string bloqueCodificado = bloque;
-        if(anterior.empty()) {
-            for(int j = 0; j < bloqueCodificado.length(); ++j){
-                if(bloqueCodificado[j] == '1'){
-                    bloqueCodificado[j] = '0';
-                }else{
-                    bloqueCodificado[j] = '1';
+        string bloqueCodificado = "";
+
+        if(i == 0){
+            //En el primer bloque se cambian todos los 1 por 0 y viceversa.
+            for(char bit : bloque){
+                if(bit == '0'){
+                    bloqueCodificado += '1';
+                } else{
+                    bloqueCodificado += '0';
                 }
             }
-        }else{
-            //Para los grupos siguientes se
-            //debe contar el número de 1s y 0s en el grupo anterior
+        }
+        //Grupos siguientes... bloque anterior del binario SIN CODIFICAR
+        else{
+            string bloqueAnterior = binario.substr(i - N, N);
+            //contar el número de 1s y 0s en el grupo anterior
             int contadorUnos = 0, contadorCeros = 0;
-            for(char caracter : anterior){
-                if(caracter == '1'){
+            for(char bit : bloqueAnterior){
+                if(bit == '1'){
                     contadorUnos++;
                 }else{
                     contadorCeros++;
@@ -103,33 +116,44 @@ string codificarMetodo1(string binario)
             }
             //Si hay igual cantidad de 1s y 0s se invierte cada bit del grupo.
             if(contadorUnos == contadorCeros){
-                for(int j = 0; j < bloqueCodificado.length(); ++j){
-                    if(bloqueCodificado[j] == '1'){
-                        bloqueCodificado[j] = '0';
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if(bloque[j] == '0'){
+                        bloqueCodificado += '1';
                     }else{
-                        bloqueCodificado[j] = '1';
+                        bloqueCodificado += '0';
                     }
                 }
-            }else if(contadorCeros > contadorUnos){
-                for(int j = 0; j < bloqueCodificado.length(); j+=2){
-                    if(bloqueCodificado[j] == '1'){
-                        bloqueCodificado[j] = '0';
-                    }else{
-                        bloqueCodificado[j] = '1';
+            }
+            //Si hay mayor cantidad de 0s se invierte cada 2 bits.
+            else if(contadorCeros > contadorUnos){
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 2 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueCodificado += '1';
+                        } else{
+                            bloqueCodificado += '0';
+                        }
+                    } else{
+                        bloqueCodificado += bloque[j];
                     }
                 }
-            }else{
-                for(int j = 0; j < bloqueCodificado.length(); j+=3){
-                    if(bloqueCodificado[j] == '1'){
-                        bloqueCodificado[j] = '0';
-                    }else{
-                        bloqueCodificado[j] = '1';
+            }
+            //Si hay mayor cantidad de 1s se invierte cada 3 bits.
+            else{
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 3 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueCodificado += '1';
+                        } else{
+                            bloqueCodificado += '0';
+                        }
+                    } else{
+                        bloqueCodificado += bloque[j];
                     }
                 }
             }
         }
         codificado += bloqueCodificado;
-        anterior = bloque;
     }
     return codificado;
 }
