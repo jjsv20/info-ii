@@ -7,6 +7,7 @@ using namespace std;
 void readByCharacter(const string& filename, string& binario);
 string convertirABinario(char ch);
 string codificarMetodo1(string binario);
+string codificarMetodo2(string binario);
 
 int main()
 {
@@ -14,6 +15,7 @@ int main()
     string inFile;
     string binario = "";
     string codificado = "";
+     string codificado2 = "";
 
     try {
         cout << "Ingrese el nombre del archivo a leer: ";
@@ -24,7 +26,10 @@ int main()
         cout << "El archivo en binario seria: " << binario << endl;
 
         codificado = codificarMetodo1(binario);
-        cout << "El archivo codificado seria: " << codificado << endl;
+        cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
+
+        codificado2 = codificarMetodo2(binario);
+        cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
 
     } catch (const ifstream::failure& e) {
         cerr << "\nI/O Error: " << e.what() << endl;
@@ -78,16 +83,6 @@ string codificarMetodo1(string binario)
     cout << "Ingrese el tamaño de los bloques: ";
     cin >> N;
     string codificado = "";
-    //string anterior = "";
-    string conEspacios = "";
-    for(size_t i = 0; i < binario.length(); i++){
-        conEspacios += binario[i];
-        if((i + 1) % N == 0 && i < binario.length() - 1){
-            conEspacios += " ";
-        }
-    }
-    cout << "El archivo separado en bloques de " << N << " bits: " << conEspacios << endl;
-
     for(size_t i = 0; i < binario.length(); i += N){
         string bloque = binario.substr(i,N);
         string bloqueCodificado = "";
@@ -156,4 +151,30 @@ string codificarMetodo1(string binario)
         codificado += bloqueCodificado;
     }
     return codificado;
+}
+
+string codificarMetodo2(string binario)
+{
+    size_t N;
+    cout << "Ingrese el tamaño de los bloques: ";
+    cin >> N;
+    string codificado2 = "";
+    for(size_t i = 0; i < binario.length(); i += N){
+        string bloque = binario.substr(i, N);
+        string nuevo = "";
+
+        if (bloque.length() < N) {
+            nuevo = bloque;
+        } else {
+            //primer bit del grupo codificado corresponde al último bit del grupo sin codificar,
+            nuevo += bloque[bloque.length() - 1];
+            //el segundo bit codificado corresponde al primero sin
+            //codificar y así sucesivamente hasta que el último corresponde al penúltimo sin codificar.
+            for (size_t j = 0; j < bloque.length() - 1; j++) {
+                nuevo += bloque[j];
+            }
+        }
+        codificado2 += nuevo;
+    }
+    return codificado2;
 }
