@@ -13,24 +13,27 @@ string codificarMetodo2(string binario);
 string decodificarMetodo2(string binario);
 void ejercicio1();
 void ejercicio2();
+void aplicacion();
 
 int main()
 {
     char opcion;
     do {
         cout << "\n======= MENÚ PRINCIPAL =======" << endl;
-        cout << "1. Codificar archivo" << endl;
-        cout << "2. Decodificar archivo" << endl;
-        cout << "3. Salir" << endl;
+        cout << "1. Banco" << endl;
+        cout << "2. Codificar archivo" << endl;
+        cout << "3. Decodificar archivo" << endl;
+        cout << "4. Salir" << endl;
         cout << "Seleccione una opción: ";
         cin >> opcion;
         switch (opcion) {
-        case '1': ejercicio1(); break;
-        case '2': ejercicio2(); break;
-        case '3': cout << "Saliendo del programa..." << endl; break;
-        default: cout << "Opción inválida.\n"; break;
+            case '1': aplicacion(); break;
+            case '2': ejercicio1(); break;
+            case '3': ejercicio2(); break;
+            case '4': cout << "Saliendo del programa..." << endl; break;
+            default: cout << "Opción inválida.\n"; break;
         }
-    } while (opcion != '3');
+    } while (opcion != '4');
     return 0;
 }
 
@@ -227,7 +230,6 @@ string decodificarMetodo1(string codificado)
     return binario;
 }
 
-
 string codificarMetodo2(string binario)
 {
     size_t N;
@@ -280,6 +282,139 @@ string decodificarMetodo2(string binario)
 
     return decodificado;
 }
+
+string codificarMetodo2admin(string binario, size_t N) {
+    string codificado2 = "";
+    for (size_t i = 0; i < binario.length(); i += N) {
+        string bloque = binario.substr(i, N);
+        string nuevo = "";
+
+        if (bloque.length() < N) {
+            nuevo = bloque;
+        } else {
+            nuevo += bloque[bloque.length() - 1];  // Primer bit codificado
+            for (size_t j = 0; j < bloque.length() - 1; j++) {
+                nuevo += bloque[j];
+            }
+        }
+        codificado2 += nuevo;
+    }
+    return codificado2;
+}
+string decodificarMetodo2admin(string binario, size_t N)
+{
+    string decodificado = "";
+    for (size_t i = 0; i < binario.length(); i += N) {
+        string bloque = binario.substr(i, N);
+        string original = "";
+
+        if (bloque.length() < N) {
+            original = bloque;
+        } else {
+            for (size_t j = 1; j < bloque.length(); j++) {
+                original += bloque[j];
+            }
+            original += bloque[0];
+        }
+        decodificado += original;
+    }
+    return decodificado;
+}
+
+
+
+void codificarAministradores(){
+    ifstream archivo("admin.txt");
+    if (!archivo.is_open()) {
+        cerr << "No se pudo abrir el archivo de texto." << endl;
+        return;
+    }
+    string contenido;
+    getline(archivo, contenido);
+    archivo.close();
+    string binario = "";
+    for(char& c : contenido){
+        binario += convertirABinario(c);
+    }
+    size_t N = 4;
+    string binarioCodificado = codificarMetodo2admin(binario, N);
+    ofstream archivoSalida("sudo.txt", ios::binary);
+    if(!archivoSalida.is_open()){
+        cerr << "No se pudo abrir el archivo sudo.txt." << endl;
+        return;
+    }
+    for (size_t i = 0; i + 8 <= binarioCodificado.length(); i += 8) {
+        char byte = convertirATexto(binarioCodificado.substr(i, 8));
+        archivoSalida.write(&byte, 1);
+    }
+    archivoSalida.close();
+
+    cout << "Archivo 'sudoCodificado.dat' generado exitosamente.\n";
+}
+
+bool validarAdmnistradores(){
+    string codificadoBinario;
+    readByCharacter("sudo.txt", codificadoBinario);
+    size_t N = 4;
+    string decodificadoBinario = decodificarMetodo2admin(codificadoBinario, N);
+
+    // Convertir binario a texto
+    string textoOriginal;
+    for (size_t i = 0; i + 8 <= decodificadoBinario.length(); i += 8) {
+        textoOriginal += convertirATexto(decodificadoBinario.substr(i, 8));
+    }
+    string usuario, clave;
+    cout << "Ingrese usuario: ";
+    cin >> usuario;
+    cout << "Ingrese clave: ";
+    cin >> clave;
+    return textoOriginal == (usuario + "," + clave);
+}
+
+void aplicacion()
+{
+    char opcion;
+    do {
+        cout << "\n======= BANCO =======\n" << endl;
+        cout << "1. Ingresar como Administrador" << endl;
+        cout << "2. Ingresar como Usuario" << endl;
+        cout << "3. Back" << endl;
+        cout << "Seleccione una opcion: " << endl;
+        cin >> opcion;
+        switch (opcion) {
+        case '1':
+            codificarAministradores();
+            if(validarAdmnistradores()){
+                cout << "***** Usuario Admnistrador *****";
+            } else{
+                cout << "Usuario o clave inconrrectos.";
+            }
+
+            //break;
+
+        }
+    } while (opcion != '3');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void ejercicio1()
@@ -375,7 +510,6 @@ void ejercicio1()
         }
     } while (opcion != '3');
 }
-
 
 void ejercicio2()
 {
@@ -483,4 +617,3 @@ void ejercicio2()
         }
     } while (opcion != '3');
 }
-
