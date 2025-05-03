@@ -55,7 +55,7 @@ void readByCharacter(const string& filename, string& binario)
     file.close();
 }
 
-void readByLineAndEncode(const string& filename, string& binario)
+void readByLine(const string& filename, string& binario)
 {
     ifstream file(filename);  // Abrir el archivo
     if (!file.is_open()) {  // Verificar si se abrió correctamente
@@ -495,7 +495,7 @@ string decodificarMetodo2usuarios(string binario, size_t N)
     return decodificado;
 }
 
-void administrador(){
+void añadirusuarios(){
     const string archivosUsuarios = "usuarios.txt";
     try {
         // Try to create/overwrite the file first
@@ -556,7 +556,7 @@ void codificarAdmin(){
 }
 bool validarAdmnistradores(){
     string codificadoBinario;
-    readByCharacter("sudo.txt", codificadoBinario);
+    readByCharacter("sudo.txt", codificadoBinario);////////////////////////////////////////////////////////////////////////////////
     size_t N = 4;
     string decodificadoBinario = decodificarMetodo1admin(codificadoBinario, N);
     string textoOriginal;
@@ -586,6 +586,90 @@ bool validarAdmnistradores(){
     return false;
 }
 
+void codificarUsuarios(){
+    ifstream archivo("usuarios.txt");
+    if(!archivo.is_open()){
+        cerr << "No se pudo abrir el archivo de texto." << endl;
+        return;
+    }
+    string contenido, binario;
+    while(getline(archivo, contenido)){
+        for(char& c : contenido){
+            binario += convertirABinario(c);
+        }
+        binario += convertirABinario('\n');
+    }
+    archivo.close();
+    size_t N = 4;
+    string binariocodificado = codificarMetodo2usuarios(binario, N);
+    ofstream archivosalida("usuarioscode.txt", ios::binary);
+    if(!archivosalida.is_open()){
+        cerr << "No se pudo abrir el archivo sudo.txt." << endl;
+        return;
+    }
+    for(size_t i = 0; i + 8 <= binariocodificado.length(); i += 8){
+        char byte = convertirATexto(binariocodificado.substr(i, 8));
+        archivosalida.write(&byte, 1);
+    }
+    archivosalida.close();
+    cout << "Archivo 'usuarioscode.txt' generado exitosamente.\n";
+}
+bool validarUsuarios(){
+    string codificadobinario;
+    readByCharacter("usuarioscode.txt", codificadobinario);
+    size_t N = 4;
+    string decodificadoBinario = decodificarMetodo2usuarios(codificadobinario, N);
+    string textoOriginal;
+    for(size_t i = 0; i + 8 <= decodificadoBinario.length(); i += 8){
+        textoOriginal += convertirATexto(decodificadoBinario.substr(i, 8));
+    }
+    string cedula, claveU;
+    //int saldo;
+    cout << "Ingrese cedula: ";
+    cin >> cedula;
+    cout << "Ingrese clave: ";
+    cin >> claveU;
+    string linea = "";
+    for (char c : textoOriginal) {
+        if (c == '\n') {
+            size_t ce = linea.find(',');
+            size_t cl = linea.find(',', ce + 1);
+            if(ce != string::npos && cl != string::npos){
+                string cedularchivo = linea.substr(0, ce);
+                string clavearchivo = linea.substr(ce + 1, cl - ce - 1);
+                string saldoarchivo = linea.substr(cl + 1);
+                if (cedula == cedularchivo && claveU == clavearchivo) {
+                    saldocuenta = saldoarchivo;
+                    return true;
+                }
+            }
+            linea = "";
+        } else {
+            linea += c;
+        }
+    }
+    if (!linea.empty()) {
+        size_t p1 = linea.find(',');
+        size_t p2 = linea.find(',', p1 + 1);
+        if (p1 != string::npos && p2 != string::npos) {
+            string cedulaArchivo = linea.substr(0, p1);
+            string claveArchivo = linea.substr(p1 + 1, p2 - p1 - 1);
+
+            if (cedula == cedulaArchivo && claveU == claveArchivo) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void consultarSaldo(){
+
+}
+
+void retirarDinero(){
+
+}
 
 void aplicacion()
 {
@@ -601,16 +685,18 @@ void aplicacion()
         case '1':
             codificarAdmin();
             if(validarAdmnistradores()){
-                cout << "***** Menu Admnistrador *****" << endl;
-                char subopcion;
+                cout << "\n*****************************" << endl;
+                cout << "\n*    MENU ADMINISTRADOR     *" << endl;
+                cout << "\n*****************************" << endl;
+                char opcionadmin;
                 do {
-                    cout << "1. Añadir usuario" << endl;
+                    cout << "\n1. Añadir usuario" << endl;
                     cout << "2. Salir" << endl;
                     cout << "Seleccione una opcion: ";
-                    cin >> subopcion;
-                    switch (subopcion) {
+                    cin >> opcionadmin;
+                    switch (opcionadmin) {
                     case '1':
-                        administrador();
+                        añadirusuarios();
                         break;
                     case '2':
                         break;
@@ -618,13 +704,42 @@ void aplicacion()
                         cout << "Opcion no valida";
                         break;
                     }
-                }while(subopcion != '2');
+                }while(opcionadmin != '2');
             }else{
                 cout << "Usuario o clave incorrectos";
             }
             break;
+        case '2':
+            string saldo;
+            codificarUsuarios();
+            if(validarUsuarios()){
+                cout << "\n*****************************" << endl;
+                cout << "\n*       MENU USUARIOS       *" << endl;
+                cout << "\n*****************************" << endl;
+                char opcionusuario;
+                do {
+                    cout << "1. Consultar saldo" << endl;
+                    cout << "2. Retirar dinero" << endl;
+                    cout << "3. Salir" << endl;
+                    cout << "Seleccione una opcion: ";
+                    cin >> opcionusuario;
+                    switch (opcionusuario) {
+                    case '1':
+
+                        break;
+                    case '2':
+                        retirarDinero();
+                        break;
+                    default:
+                        cout << "Opcion no valida";
+                        break;
+                    }
+                }while(opcionusuario != '3');
+            }else{
+                cout << "cedula o clave incorrectos";
+            }
         }
-    } while(opcion != '2');
+    } while(opcion != '3');
 }
 
 
@@ -703,7 +818,7 @@ void ejercicio1()
                 cout << "Ingrese el nombre del archivo de salida (binario): ";
                 cin >> outFile;
                 // Read the file using different methods
-                readByLineAndEncode(inFile, binario);
+                readByCharacter(inFile, binario);
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado = codificarMetodo1(binario);//Llamado Funcion Metodo 1
                 cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
@@ -737,7 +852,7 @@ void ejercicio1()
                 cout << "Ingrese el nombre del archivo de salida (binario): ";
                 cin >> outFile;
                 // Read the file using different methods
-                readByLineAndEncode(inFile, binario);
+                readByLine(inFile, binario);
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado2 = codificarMetodo2(binario);//Llamado Funcion Metodo 2
                 cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
