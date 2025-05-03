@@ -5,6 +5,7 @@
 using namespace std;
 
 void readByCharacter(const string& filename, string& binario);
+void readByLineAndEncode(const string& filename, string& binario);
 string convertirABinario(char ch);
 char convertirATexto(string binario);
 string codificarMetodo1(string binario);
@@ -37,7 +38,7 @@ int main()
     return 0;
 }
 
-// Function to read a file character by character
+//Function to read a file character by character
 void readByCharacter(const string& filename, string& binario)
 {
     ifstream file(filename, ios::binary);
@@ -53,6 +54,32 @@ void readByCharacter(const string& filename, string& binario)
     }
     file.close();
 }
+
+void readByLineAndEncode(const string& filename, string& binario)
+{
+    ifstream file(filename);  // Abrir el archivo
+    if (!file.is_open()) {  // Verificar si se abrió correctamente
+        throw runtime_error("No se pudo abrir el archivo para lectura línea por línea.");
+    }
+
+    string linea;
+    //int lineCount = 1;  // Contador de líneas
+    while (getline(file, linea)) {  // Leer línea por línea
+        //cout << "Leyendo línea " << lineCount++ << ": " << linea << endl;
+
+        // Codificar cada carácter de la línea a binario
+        for (char ch : linea) {
+            binario += convertirABinario(ch);  // Convertir cada carácter a binario
+        }
+
+        // Agregar un salto de línea codificado al final de cada línea
+        binario += convertirABinario('\n');
+    }
+
+    file.close();  // Cerrar el archivo después de procesarlo
+}
+
+
 
 string convertirABinario(char ch)
 {
@@ -155,7 +182,6 @@ string codificarMetodo1(string binario)
     }
     return codificado;
 }
-
 string decodificarMetodo1(string codificado)
 {
     size_t N;
@@ -230,6 +256,7 @@ string decodificarMetodo1(string codificado)
     return binario;
 }
 
+
 string codificarMetodo2(string binario)
 {
     size_t N;
@@ -255,7 +282,6 @@ string codificarMetodo2(string binario)
     }
     return codificado2;
 }
-
 string decodificarMetodo2(string binario)
 {
     size_t N;
@@ -283,7 +309,155 @@ string decodificarMetodo2(string binario)
     return decodificado;
 }
 
-string codificarMetodo2admin(string binario, size_t N) {
+
+string codificarMetodo1admin(string binario, size_t N)
+{
+    //size_t N = 4; // Valor fijo para el tamaño de los bloques
+    string codificado = "";
+    for(size_t i = 0; i < binario.length(); i += N){
+        string bloque = binario.substr(i, N);
+        string bloqueCodificado = "";
+
+        if(i == 0){
+            // En el primer bloque se cambian todos los 1 por 0 y viceversa.
+            for(char bit : bloque){
+                if(bit == '0'){
+                    bloqueCodificado += '1';
+                } else{
+                    bloqueCodificado += '0';
+                }
+            }
+        }
+        // Grupos siguientes... bloque anterior del binario SIN CODIFICAR
+        else{
+            string bloqueAnterior = binario.substr(i - N, N);
+            int contadorUnos = 0, contadorCeros = 0;
+            for(char bit : bloqueAnterior){
+                if(bit == '1'){
+                    contadorUnos++;
+                } else{
+                    contadorCeros++;
+                }
+            }
+
+            // Si hay igual cantidad de 1s y 0s se invierte cada bit del grupo.
+            if(contadorUnos == contadorCeros){
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if(bloque[j] == '0'){
+                        bloqueCodificado += '1';
+                    } else{
+                        bloqueCodificado += '0';
+                    }
+                }
+            }
+            // Si hay mayor cantidad de 0s se invierte cada 2 bits.
+            else if(contadorCeros > contadorUnos){
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 2 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueCodificado += '1';
+                        } else{
+                            bloqueCodificado += '0';
+                        }
+                    } else{
+                        bloqueCodificado += bloque[j];
+                    }
+                }
+            }
+            // Si hay mayor cantidad de 1s se invierte cada 3 bits.
+            else{
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 3 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueCodificado += '1';
+                        } else{
+                            bloqueCodificado += '0';
+                        }
+                    } else{
+                        bloqueCodificado += bloque[j];
+                    }
+                }
+            }
+        }
+        codificado += bloqueCodificado;
+    }
+    return codificado;
+}
+string decodificarMetodo1admin(string codificado, size_t N)
+{
+    //size_t N = 4; // Tamaño fijo del bloque (semilla)
+    string binario = "";
+    for(size_t i = 0; i < codificado.length(); i += N){
+        string bloque = codificado.substr(i, N);
+        string bloqueDecodificado = "";
+
+        if(i == 0){
+            // En el primer bloque se cambian todos los 1 por 0 y viceversa.
+            for(char bit : bloque){
+                if(bit == '0'){
+                    bloqueDecodificado += '1';
+                } else{
+                    bloqueDecodificado += '0';
+                }
+            }
+        }
+        else{
+            string bloqueAnterior = binario.substr(i - N, N);
+            int contadorUnos = 0, contadorCeros = 0;
+            for(char bit : bloqueAnterior){
+                if(bit == '1'){
+                    contadorUnos++;
+                } else{
+                    contadorCeros++;
+                }
+            }
+
+            // Si hay igual cantidad de 1s y 0s se invierte cada bit del grupo.
+            if(contadorUnos == contadorCeros){
+                for(char bit : bloque){
+                    if(bit == '0'){
+                        bloqueDecodificado += '1';
+                    } else{
+                        bloqueDecodificado += '0';
+                    }
+                }
+            }
+            // Si hay mayor cantidad de 0s se invierte cada 2 bits.
+            else if(contadorCeros > contadorUnos){
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 2 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueDecodificado += '1';
+                        } else{
+                            bloqueDecodificado += '0';
+                        }
+                    } else{
+                        bloqueDecodificado += bloque[j];
+                    }
+                }
+            }
+            // Si hay mayor cantidad de 1s se invierte cada 3 bits.
+            else{
+                for(size_t j = 0; j < bloque.length(); j++){
+                    if((j + 1) % 3 == 0){
+                        if(bloque[j] == '0'){
+                            bloqueDecodificado += '1';
+                        } else{
+                            bloqueDecodificado += '0';
+                        }
+                    } else{
+                        bloqueDecodificado += bloque[j];
+                    }
+                }
+            }
+        }
+        binario += bloqueDecodificado;
+    }
+    return binario;
+}
+
+
+string codificarMetodo2usuarios(string binario, size_t N) {
     string codificado2 = "";
     for (size_t i = 0; i < binario.length(); i += N) {
         string bloque = binario.substr(i, N);
@@ -301,7 +475,7 @@ string codificarMetodo2admin(string binario, size_t N) {
     }
     return codificado2;
 }
-string decodificarMetodo2admin(string binario, size_t N)
+string decodificarMetodo2usuarios(string binario, size_t N)
 {
     string decodificado = "";
     for (size_t i = 0; i < binario.length(); i += N) {
@@ -321,23 +495,52 @@ string decodificarMetodo2admin(string binario, size_t N)
     return decodificado;
 }
 
+void administrador(){
+    const string archivosUsuarios = "usuarios.txt";
+    try {
+        // Try to create/overwrite the file first
+        ofstream archivoSalida(archivosUsuarios, ios::app);
+        if (!archivoSalida)
+        {
+            throw runtime_error("Failed to create/open file for writing");
+        }
+        //string inFile;
+        string cedula, clave;
+        int saldo;
+        cout << "Ingrese cedula: ";
+        cin >> cedula;
+        cout << "Ingrese clave: ";
+        cin >> clave;
+        cout << "Ingrese saldo: ";
+        cin >> saldo;
+        archivoSalida << cedula << "," << clave << "," << saldo << endl;
+        archivoSalida.close();
 
+    } catch (const ifstream::failure& e) {
+        cerr << "\nI/O Error: " << e.what() << endl;
+    } catch (const runtime_error& e) {
+        cerr << "\nError: " << e.what() << endl;
+    } catch (...) {
+        cerr << "\nUnknown error occurred while handling the file." << endl;
+    }
+}
 
-void codificarAministradores(){
+void codificarAdmin(){
     ifstream archivo("admin.txt");
     if (!archivo.is_open()) {
         cerr << "No se pudo abrir el archivo de texto." << endl;
         return;
     }
-    string contenido;
-    getline(archivo, contenido);
-    archivo.close();
-    string binario = "";
-    for(char& c : contenido){
-        binario += convertirABinario(c);
+    string contenido, binario;
+    while(getline(archivo, contenido)){
+        for(char& c : contenido){
+            binario += convertirABinario(c);
+        }
+        binario += convertirABinario('\n');
     }
+    archivo.close();
     size_t N = 4;
-    string binarioCodificado = codificarMetodo2admin(binario, N);
+    string binarioCodificado = codificarMetodo1admin(binario, N);
     ofstream archivoSalida("sudo.txt", ios::binary);
     if(!archivoSalida.is_open()){
         cerr << "No se pudo abrir el archivo sudo.txt." << endl;
@@ -349,16 +552,13 @@ void codificarAministradores(){
     }
     archivoSalida.close();
 
-    cout << "Archivo 'sudoCodificado.dat' generado exitosamente.\n";
+    cout << "Archivo 'sudo.txt' generado exitosamente.\n";
 }
-
 bool validarAdmnistradores(){
     string codificadoBinario;
     readByCharacter("sudo.txt", codificadoBinario);
     size_t N = 4;
-    string decodificadoBinario = decodificarMetodo2admin(codificadoBinario, N);
-
-    // Convertir binario a texto
+    string decodificadoBinario = decodificarMetodo1admin(codificadoBinario, N);
     string textoOriginal;
     for (size_t i = 0; i + 8 <= decodificadoBinario.length(); i += 8) {
         textoOriginal += convertirATexto(decodificadoBinario.substr(i, 8));
@@ -368,33 +568,95 @@ bool validarAdmnistradores(){
     cin >> usuario;
     cout << "Ingrese clave: ";
     cin >> clave;
-    return textoOriginal == (usuario + "," + clave);
+    //cout << "***** Usuario " << usuario << " *****" << endl;
+    string linea = "";
+    for (char c : textoOriginal) {
+        if (c == '\n') {
+            if (linea == (usuario + "," + clave)) {
+                return true;
+            }
+            linea = "";
+        } else {
+            linea += c;
+        }
+    }
+    if (!linea.empty() && linea == (usuario + "," + clave)) {
+        return true;
+    }
+    return false;
 }
+
 
 void aplicacion()
 {
     char opcion;
     do {
-        cout << "\n======= BANCO =======\n" << endl;
+        cout << "\n======= BANCO =======" << endl;
         cout << "1. Ingresar como Administrador" << endl;
         cout << "2. Ingresar como Usuario" << endl;
         cout << "3. Back" << endl;
-        cout << "Seleccione una opcion: " << endl;
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
         switch (opcion) {
         case '1':
-            codificarAministradores();
+            codificarAdmin();
             if(validarAdmnistradores()){
-                cout << "***** Usuario Admnistrador *****";
-            } else{
-                cout << "Usuario o clave inconrrectos.";
+                cout << "***** Menu Admnistrador *****" << endl;
+                char subopcion;
+                do {
+                    cout << "1. Añadir usuario" << endl;
+                    cout << "2. Salir" << endl;
+                    cout << "Seleccione una opcion: ";
+                    cin >> subopcion;
+                    switch (subopcion) {
+                    case '1':
+                        administrador();
+                        break;
+                    case '2':
+                        break;
+                    default:
+                        cout << "Opcion no valida";
+                        break;
+                    }
+                }while(subopcion != '2');
+            }else{
+                cout << "Usuario o clave incorrectos";
             }
-
-            //break;
-
+            break;
         }
-    } while (opcion != '3');
+    } while(opcion != '2');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -441,7 +703,7 @@ void ejercicio1()
                 cout << "Ingrese el nombre del archivo de salida (binario): ";
                 cin >> outFile;
                 // Read the file using different methods
-                readByCharacter(inFile, binario);
+                readByLineAndEncode(inFile, binario);
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado = codificarMetodo1(binario);//Llamado Funcion Metodo 1
                 cout << "El archivo codificado por el metodo 1 seria: " << codificado << endl;
@@ -475,7 +737,7 @@ void ejercicio1()
                 cout << "Ingrese el nombre del archivo de salida (binario): ";
                 cin >> outFile;
                 // Read the file using different methods
-                readByCharacter(inFile, binario);
+                readByLineAndEncode(inFile, binario);
                 cout << "El archivo en binario seria: " << binario << endl;
                 codificado2 = codificarMetodo2(binario);//Llamado Funcion Metodo 2
                 cout << "El archivo codificado por el metodo 2 seria: " << codificado2 << endl;
