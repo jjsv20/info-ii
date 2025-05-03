@@ -729,14 +729,111 @@ bool descontarSaldo(string& cedula, string& clave, string& saldoOut){
             archivoSalida.write(&byte, 1);
         }
         archivoSalida.close();
+
+        ofstream archivoPlano("usuarios.txt");
+        if (!archivoPlano.is_open()) {
+            cerr << "No se pudo abrir el archivo usuarios.txt para escribir." << endl;
+            return false;
+        }
+        archivoPlano << descuentosaldo;
+        archivoPlano.close();
         return true;
     }
     return false;
 }
 
-bool retirarDinero(){
+void retirarDinero(string& cedula, string& clave, string& saldoOut){
+    string codificadobinario;
+    readByCharacter("usuarioscode.txt", codificadobinario);
+    size_t N = 4;
+    string decodificadoBinario = decodificarMetodo2usuarios(codificadobinario, N);
+    string textoOriginal;
+    for (size_t i = 0; i + 8 <= decodificadoBinario.length(); i += 8) {
+        textoOriginal += convertirATexto(decodificadoBinario.substr(i, 8));
+    }
+    string retiro = "";
+    string linea = "";
+    int cantidad;
+    bool encontrado = false;
+    cout << "Ingrese cantidad a retirar : ";
+    cin >> cantidad;
+    for (char c : textoOriginal) {
+        if (c == '\n') {
+            size_t ce = linea.find(',');
+            size_t cl = linea.find(',', ce + 1);
+            if (ce != string::npos && cl != string::npos) {
+                string cedulaArchivo = linea.substr(0, ce);
+                string claveArchivo = linea.substr(ce + 1, cl - ce - 1);
+                string saldoArchivo = linea.substr(cl + 1);
+                if (cedula == cedulaArchivo && clave == claveArchivo) {
+                    int saldoInt = stoi(saldoArchivo);
+                    if(cantidad + 1000 > saldoInt){
+                        cout << "Fondo insuficiente." << endl;
+                    }
+                    saldoInt -= (cantidad + 1000);
+                    if (saldoInt < 0) saldoInt = 0;
+                    saldoOut = to_string(saldoInt);
+                    linea = cedulaArchivo + "," + claveArchivo + "," + saldoOut;
+                    encontrado = true;
+                }
+            }
+            retiro += linea + '\n';
+            linea = "";
+        }
+    }
+    if (!linea.empty()){
+        size_t ce = linea.find(',');
+        size_t cl = linea.find(',', ce + 1);
+        if (ce != string::npos && cl != string::npos) {
+            string cedulaArchivo = linea.substr(0, ce);
+            string claveArchivo = linea.substr(ce + 1, cl - ce - 1);
+            string saldoArchivo = linea.substr(cl + 1);
+            if (cedula == cedulaArchivo && clave == claveArchivo) {
+                cout << "Ingrese cantidad a retirar : ";
+                cin >> cantidad;
+                int saldoInt = stoi(saldoArchivo);
+                if(cantidad + 1000 > saldoInt){
+                    cout << "Fondo insuficiente." << endl;
+                }
+                saldoInt -= (cantidad + 1000);
+                if (saldoInt < 0) saldoInt = 0;
+                saldoOut = to_string(saldoInt);
+                linea = cedulaArchivo + "," + claveArchivo + "," + saldoOut;
+                encontrado = true;
+            }
+        }
+        retiro += linea;
+    }
+    if (encontrado) {
+        string binario = "";
+        for (char c : retiro) {
+            binario += convertirABinario(c);
+        }
+        string binariocodificado = codificarMetodo2usuarios(binario, N);
+        ofstream archivoSalida("usuarioscode.txt", ios::binary);
+        if (!archivoSalida.is_open()) {
+            cerr << "No se pudo abrir el archivo para escribir." << endl;
+            return;
+        }
+        for (size_t i = 0; i + 8 <= binariocodificado.length(); i += 8) {
+            char byte = convertirATexto(binariocodificado.substr(i, 8));
+            archivoSalida.write(&byte, 1);
+        }
+        archivoSalida.close();
 
+        ofstream archivoPlano("usuarios.txt");
+        if (!archivoPlano.is_open()) {
+            cerr << "No se pudo abrir el archivo usuarios.txt para escribir." << endl;
+            return;
+        }
+        archivoPlano << retiro;
+        archivoPlano.close();
+        cout << "Retiro realizado exitosamente. Saldo: " << saldoOut << endl;
+    } else {
+        cerr << "Hubo un error en el retiro." << endl;
+    }
 }
+
 
 void aplicacion()
 {
@@ -797,7 +894,7 @@ void aplicacion()
                             cout << "\nSaldo actual: " << saldo << endl;
                             break;
                         case '2':
-                            retirarDinero();
+                            retirarDinero(cedula, clave, saldo);
                             break;
                         case '3':
                             break;
