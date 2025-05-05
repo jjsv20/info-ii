@@ -755,7 +755,7 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
     string linea = "";
     int cantidad;
     bool encontrado = false;
-    cout << "Ingrese cantidad a retirar : ";
+    cout << "\nIngrese cantidad a retirar : ";
     cin >> cantidad;
     for (char c : textoOriginal) {
         if (c == '\n') {
@@ -768,9 +768,10 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
                 if (cedula == cedulaArchivo && clave == claveArchivo) {
                     int saldoInt = stoi(saldoArchivo);
                     if(cantidad + 1000 > saldoInt){
-                        cout << "Fondo insuficiente." << endl;
+                        cout << "\nFondo insuficiente." << endl;
                         retiro += linea + '\n';
                         linea = "";
+                        continue;
                     }
                     saldoInt -= (cantidad + 1000);
                     if (saldoInt < 0) saldoInt = 0;
@@ -798,6 +799,7 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
                     cout << "Fondo insuficiente." << endl;
                     retiro += linea + '\n';
                     linea = "";
+                    return;
                 }
                 saldoInt -= (cantidad + 1000);
                 if (saldoInt < 0) saldoInt = 0;
@@ -832,7 +834,10 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
         }
         archivoPlano << retiro;
         archivoPlano.close();
-        cout << "Retiro realizado exitosamente. Saldo: " << saldoOut << endl;
+        cout << "\nRetiro realizado exitosamente." << endl;
+        cout << "Monto retirado: -$" << cantidad << " COP" <<endl;
+        cout << "Saldo restante: $" << saldoOut << " COP" << endl;
+        cout << "Se ha descontado una tarifa de $1.000 COP por el retiro" << endl;
     } else {
         cerr << "Hubo un error en el retiro." << endl;
     }
@@ -853,9 +858,9 @@ void aplicacion()
         case '1':{
             codificarAdmin();
             if(validarAdmnistradores()){
-                cout << "\n*****************************" << endl;
-                cout << "\n*    MENU ADMINISTRADOR     *" << endl;
-                cout << "\n*****************************" << endl;
+                cout << "\n ******************************" << endl;
+                cout << " *     MENU ADMINISTRADOR     *" << endl;
+                cout << " ******************************" << endl;
                 char opcionadmin;
                 do {
                     cout << "\n1. Añadir usuario" << endl;
@@ -882,9 +887,9 @@ void aplicacion()
             string cedula, clave, saldo;
             codificarUsuarios();
             if(validarUsuarios(cedula, clave, saldo)){
-                cout << "\n*****************************" << endl;
-                cout << "\n*       MENU USUARIOS       *" << endl;
-                cout << "\n*****************************" << endl;
+                cout << "\n ******************************" << endl;
+                cout << " *        MENU USUARIOS       *" << endl;
+                cout << " ******************************" << endl;
                 char opcionusuario;
                 do {
                     cout << "\n1. Consultar saldo" << endl;
@@ -895,10 +900,13 @@ void aplicacion()
                     switch (opcionusuario) {
                     case '1':
                         descontarSaldo(cedula, clave, saldo);
-                        cout << "\nSaldo actual: " << saldo << endl;
+                        cout << "\nConsulta realizada con exito." << endl;
+                        cout << "Se ha descontado una tarifa de $1.000 COP por la consulta" << endl;
+                        cout << "Saldo actual: $" << saldo << " COP" << endl;
                         break;
                     case '2':
                         retirarDinero(cedula, clave, saldo);
+
                         break;
                     case '3':
                         break;
@@ -908,7 +916,7 @@ void aplicacion()
                     }
                 }while(opcionusuario != '3');
             }else{
-                cout << "cedula o clave incorrectos";
+                cout << "Cedula o clave incorrectos";
             }
             break;
         }
