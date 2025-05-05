@@ -836,8 +836,8 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
         archivoPlano.close();
         cout << "\nRetiro realizado exitosamente." << endl;
         cout << "Monto retirado: -$" << cantidad << " COP" <<endl;
+        cout << "Costo de retiro: -$1.000 COP" << endl;
         cout << "Saldo restante: $" << saldoOut << " COP" << endl;
-        cout << "Se ha descontado una tarifa de $1.000 COP por el retiro" << endl;
     } else {
         cerr << "Hubo un error en el retiro." << endl;
     }
@@ -906,7 +906,6 @@ void aplicacion()
                         break;
                     case '2':
                         retirarDinero(cedula, clave, saldo);
-
                         break;
                     case '3':
                         break;
