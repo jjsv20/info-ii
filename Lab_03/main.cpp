@@ -28,11 +28,11 @@ int main()
         cout << "Seleccione una opción: ";
         cin >> opcion;
         switch (opcion) {
-            case '1': aplicacion(); break;
-            case '2': ejercicio1(); break;
-            case '3': ejercicio2(); break;
-            case '4': cout << "Saliendo del programa..." << endl; break;
-            default: cout << "Opción inválida.\n"; break;
+        case '1': aplicacion(); break;
+        case '2': ejercicio1(); break;
+        case '3': ejercicio2(); break;
+        case '4': cout << "Saliendo del programa..." << endl; break;
+        default: cout << "Opción inválida.\n"; break;
         }
     } while (opcion != '4');
     return 0;
@@ -769,6 +769,8 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
                     int saldoInt = stoi(saldoArchivo);
                     if(cantidad + 1000 > saldoInt){
                         cout << "Fondo insuficiente." << endl;
+                        retiro += linea + '\n';
+                        linea = "";
                     }
                     saldoInt -= (cantidad + 1000);
                     if (saldoInt < 0) saldoInt = 0;
@@ -779,6 +781,8 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
             }
             retiro += linea + '\n';
             linea = "";
+        }else{
+            linea += c;
         }
     }
     if (!linea.empty()){
@@ -789,11 +793,11 @@ void retirarDinero(string& cedula, string& clave, string& saldoOut){
             string claveArchivo = linea.substr(ce + 1, cl - ce - 1);
             string saldoArchivo = linea.substr(cl + 1);
             if (cedula == cedulaArchivo && clave == claveArchivo) {
-                cout << "Ingrese cantidad a retirar : ";
-                cin >> cantidad;
                 int saldoInt = stoi(saldoArchivo);
                 if(cantidad + 1000 > saldoInt){
                     cout << "Fondo insuficiente." << endl;
+                    retiro += linea + '\n';
+                    linea = "";
                 }
                 saldoInt -= (cantidad + 1000);
                 if (saldoInt < 0) saldoInt = 0;
@@ -889,27 +893,27 @@ void aplicacion()
                     cout << "Seleccione una opcion: ";
                     cin >> opcionusuario;
                     switch (opcionusuario) {
-                        case '1':
-                            descontarSaldo(cedula, clave, saldo);
-                            cout << "\nSaldo actual: " << saldo << endl;
-                            break;
-                        case '2':
-                            retirarDinero(cedula, clave, saldo);
-                            break;
-                        case '3':
-                            break;
-                        default:
-                            cout << "Opcion no valida";
-                            break;
-                        }
-                    }while(opcionusuario != '3');
-                }else{
-                    cout << "cedula o clave incorrectos";
-                }
-                break;
+                    case '1':
+                        descontarSaldo(cedula, clave, saldo);
+                        cout << "\nSaldo actual: " << saldo << endl;
+                        break;
+                    case '2':
+                        retirarDinero(cedula, clave, saldo);
+                        break;
+                    case '3':
+                        break;
+                    default:
+                        cout << "Opcion no valida";
+                        break;
+                    }
+                }while(opcionusuario != '3');
+            }else{
+                cout << "cedula o clave incorrectos";
             }
+            break;
+        }
         case '3':
-                break;
+            break;
         }
     } while(opcion != '3');
 }
