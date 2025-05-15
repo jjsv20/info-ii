@@ -47,7 +47,6 @@ public:
         }
     }
 
-
     void actualizarTabla(map<string, pair<string, int>> nuevaTabla){
         tabla = nuevaTabla;
     }
@@ -79,6 +78,13 @@ public:
         }
     }
 
+    void mostrarRed(){
+        cout << "Enrutadores en la Red: " << endl;
+        for(auto& enrutador : enrutadores){
+            cout << "- " << enrutador.first << endl;
+        }
+    }
+
     void archivo(string archivo) {
         ifstream file(archivo);
         if(!file) {
@@ -102,10 +108,11 @@ int main() {
     Red red;
     int opcion;
     do {
-        cout << "Menu" << endl;
+        cout << "\nMenu" << endl;
         cout << "1. Agregar Enrutador" << endl;
         cout << "2. Remover Enrutador" << endl;
-        cout << "3. Salir" << endl;
+        cout << "3. Mostrar Red" << endl;
+        cout << "4. Salir" << endl;
         cout << "Ingrese opcion: ";
         cin >> opcion;
         string nombre;
@@ -123,12 +130,12 @@ int main() {
             cout << "Enrutador eliminado" << endl;
             break;
         case 3:
-            cout << "Saliendo..." << endl;
+            red.mostrarRed();
             break;
         default:
             cout << "Opcion invalida";
             break;
         }
-    } while(opcion != 3);
+    } while(opcion != 4);
     return 0;
 }
