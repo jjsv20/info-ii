@@ -3,6 +3,8 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <sstream>
+#include <cstdlib>
 #include <iomanip>
 using namespace std;
 
@@ -105,6 +107,13 @@ public:
         enrutadores[destino].agregarRuta(origen, costo);
     }
 
+    void mostrarRed(){
+        cout << "\nEnrutadores en la red: ";
+        for(auto& enrutador : enrutadores){
+            cout << " - " << enrutador.first << endl;
+        }
+    }
+
     bool removerEnrutador(string nombre){
         if(!existeEnrutador(nombre)){
             cout << "El enrutador no existe." << endl;
@@ -127,27 +136,24 @@ public:
         return enrutadores;
     }/*/
 
-    void archivo(const string& archivo) {
-        ifstream file(archivo);
-        if(!file) {
-            cout << "No se pudo abrir el archivo." << endl;
-            return;
-        }
-        string nombre, destino, salto;
-        int costo;
-        while (file >> nombre >> destino >> salto >> costo) {
-            if (enrutadores.find(nombre) == enrutadores.end()) {
-                enrutadores[nombre] = Enrutador(nombre);
+    void archivo(const string& namearchivo) {
+        ifstream archivo(namearchivo);
+        string linea;
+        if (archivo.is_open()) {
+            int numEnrutadores;
+            archivo >> numEnrutadores;
+            getline(archivo, linea);
+            while (getline(archivo, linea)) {
+                stringstream ss(linea);
+                string origen, destino;
+                int costo;
+                ss >> origen >> destino >> costo;
+                agregarEnlace(origen, destino, costo);
             }
-            if (enrutadores.find(destino) == enrutadores.end()) {
-                enrutadores[destino] = Enrutador(destino);
-            }
-            enrutadores[nombre].agregarRuta(destino, costo);
-            enrutadores[destino].agregarRuta(nombre, costo);
+        } else {
+            cout << "Error: No se pudo abrir el archivo ";
         }
-
-        file.close();
-        cout << "Archivo cargado exitosamente.\n";
+        archivo.close();
     }
 
     vector<string> caminoCompleto(const string &origen, const string &destino, int &costoTotal){
@@ -197,12 +203,13 @@ int main() {
         cout << "\n----- Menu ----"<< endl;
         cout << "1. Agregar Enrutador" << endl;
         cout << "2. Remover Enrutador" << endl;
-        cout << "3. Mostrar Tablas de Enrutamiento" << endl;
-        cout << "4. Agregar enlace" << endl;
-        cout << "5. Cargar desde archivo" << endl;
-        cout << "6. Calcular costo" << endl;
-        cout << "7. Camino eficiente" << endl;
-        cout << "8. Salir" << endl;
+        cout << "3. Agregar enlace" << endl;
+        cout << "4. Mostrar Tablas de Enrutamiento" << endl;
+        cout << "5. Mostrar la Red" << endl;
+        cout << "6. Cargar desde archivo" << endl;
+        cout << "7. Calcular costo" << endl;
+        cout << "8. Camino eficiente" << endl;
+        cout << "9. Salir" << endl;
         cout << "Ingrese opcion: ";
         cin >> opcion;
         string nombre;
@@ -224,9 +231,7 @@ int main() {
             break;
         }
         case 3:
-            red.mostrarTablas();
-            break;
-        case 4: {
+        {
             string origen, destino;
             int costo;
             cout << "Ingrese el Enrutador origen: ";
@@ -239,13 +244,19 @@ int main() {
             cout << "Enlace agregado exitosamente.\n";
             break;
         }
-        case 5: {
+        case 4:
+            red.mostrarTablas();
+            break;
+        case 5:
+            red.mostrarRed();
+            break;
+        case 6: {
             cout << "Ingrese el nombre del archivo: ";
             cin >> nombre;
             red.archivo(nombre);
             break;
         }
-        case 6: {
+        case 7: {
             string origen, destino;
             cout << "Ingrese el Enrutador origen: ";
             cin >> origen;
@@ -254,13 +265,13 @@ int main() {
             red.caminoPaquete(origen, destino);
             break;
         }
-        case 7:
+        case 8:
             cout << "Saliendo del programa...\n";
             break;
         default:
             cout << "Opcion invalida. Intente de nuevo.\n";
             break;
         }
-    } while (opcion != 7);
+    } while (opcion != 9);
     return 0;
 }
