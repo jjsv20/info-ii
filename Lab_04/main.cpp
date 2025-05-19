@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <iomanip>
+#include <set>
 using namespace std;
 
 class Ruta{
@@ -52,16 +53,6 @@ public:
         }
         tablaDeEnrutamiento.erase(destino);
     }
-
-    /*/void mostrarTabla() const {
-        cout << "Tabla de enrutamiento para " << nombre << ":" << endl;
-        cout << left << setw(10) << "Destino" << setw(10) << "Costo" << setw(15) << "Siguiente Salto" << endl;
-        for (const auto& entrada : tabla) {
-            cout << setw(10) << entrada.first
-                 << setw(10) << entrada.second.second
-                 << setw(15) << entrada.second.first << endl;
-        }
-    }/*/
 
     void mostrarTabla() {
         cout << "\nTabla de enrutamiento para " << nombre << ":\n";
@@ -133,14 +124,12 @@ public:
         for (const auto& par : enrutadores) {
             nombres.push_back(par.first);
         }
-
         // Imprimir encabezado
         cout << "\n   ";
         for (const auto& destino : nombres) {
             cout << setw(4) << destino;
         }
         cout << endl;
-
         // Imprimir las filas
         for (const auto& origen : nombres) {
             cout << setw(2) << origen << " ";
@@ -180,44 +169,99 @@ public:
         archivo.close();
     }
 
-    vector<string> caminoCompleto(const string &origen, const string &destino, int &costoTotal){
-        vector<string> camino;
-        costoTotal = 0;
-        if(enrutadores.count(origen)){
-            string actual = origen;
-            while(actual != destino){
-                camino.push_back(actual);
-                auto tablaOrigen = enrutadores.at(actual).getTablaDeEnrutamiento();
-                if(tablaOrigen.count(destino)){
-                    string siguienteSalto = tablaOrigen.at(destino).second;
-                    int costoSalto = tablaOrigen.at(siguienteSalto).first;
-                    cout << "Desde " << actual << " a " << siguienteSalto << " con costo: " << costoSalto;
-                    costoTotal += costoSalto;
-                    actual = siguienteSalto;
-                }else {
-                    camino.clear();
-                    break;
+    void encontrarCamino(const string& actual, const string& destino, vector<string>& caminoActual, int costoAcumulado,
+                         vector<string>& mejorCamino, int& menorCosto, int& saltos, map<string, bool>& enrutadorvisitado){
+        enrutadorvisitado[actual] = true;
+        caminoActual.push_back(actual);
+        if(actual == destino){
+            if((costoAcumulado < menorCosto) || (costoAcumulado == menorCosto && caminoActual.size() < saltos)){
+                menorCosto = costoAcumulado;
+                mejorCamino = caminoActual;
+                saltos = caminoActual.size();
+            }
+        }else{
+            for(const Ruta& ruta : enrutadores[actual].rutas){
+                if(!enrutadorvisitado[ruta.destino]){
+                    encontrarCamino(ruta.destino, destino, caminoActual, costoAcumulado + ruta.costo, mejorCamino, menorCosto, saltos, enrutadorvisitado);
                 }
             }
-            if(!camino.empty()){
-                camino.push_back(destino);
-            }
         }
-        return camino;
+        caminoActual.pop_back();
+        enrutadorvisitado[actual] = false;
+    }
+
+    int costoPaquete(const string& origen, const string& destino){
+        vector<string> mejorCamino, caminoActual;
+        map<string, bool> enrutadorVisitado;
+        int menorCosto = INT_MAX;
+        int saltos = INT_MAX;
+        for(auto& par : enrutadores){
+            enrutadorVisitado[par.first] = false;
+        }
+        if(!enrutadores.count(origen) || !enrutadores.count(destino)){
+            return -1;
+        }
+        encontrarCamino(origen, destino, caminoActual, 0, mejorCamino, menorCosto, saltos, enrutadorVisitado);
+        if(menorCosto == INT_MAX){
+            return -1;
+        }
+        return menorCosto;
     }
 
     void caminoPaquete(const string& origen, const string& destino){
-        int costoTotal = 0;
-        vector<string> camino = caminoCompleto(origen, destino, costoTotal);
-        if(!camino.empty()){
-            cout << "Camino desde " << origen << " a " << destino << " Costo: " << costoTotal << ": ";
-            for(const auto &nodo : camino) {
-                cout << nodo << (nodo == destino ? "\n" : " -> ");
-            }
+        vector<string> mejorCamino, caminoActual;
+        map<string,bool> enrutadorvisitado;
+        int menorCosto = INT_MAX;
+        int saltos = INT_MAX;
+        for(auto& par : enrutadores){
+            enrutadorvisitado[par.first] = false;
+        }
+        if(!enrutadores.count(origen) || !enrutadores.count(destino)){
+            cout << "Origen o destino no existen en la Red" << endl;
+            return;
+        }
+        encontrarCamino(origen, destino, caminoActual, 0, mejorCamino, menorCosto, saltos, enrutadorvisitado);
+        if(menorCosto == INT_MAX){
+            cout << "No existe camino entre " << origen << " y " << destino << endl;
         }else{
-            cout << "No hay ruta";
+            cout << "Camino mas eficiente: ";
+            for(size_t i = 0; i < mejorCamino.size(); ++i){
+                cout << mejorCamino[i];
+                if(i + 1 < mejorCamino.size()){
+                    cout << " -> ";
+                }
+                //cout << "\nCosto total: " << menorCosto << ""
+            }
         }
     }
+
+    void generarRedAleatoria(int numEnrutadores, int totalConexiones, string archivo) {
+        ofstream file(archivo);
+        srand(time(0));
+        vector<string> nombres;
+        for (int i = 0; i < numEnrutadores; i++) {
+            string nombre = string(1, 'A' + i);
+            nombres.push_back(nombre);
+        }
+        file << numEnrutadores << endl;
+        set<pair<string, string>> conexiones;
+        while (conexiones.size() < totalConexiones) {
+            string origen = nombres[rand() % nombres.size()];
+            string destino = nombres[rand() % nombres.size()];
+            if (origen != destino) {
+                pair<string, string> conexion = make_pair(min(origen, destino), max(origen, destino));
+                if (conexiones.count(conexion) == 0) {
+                    int costo = 1 + rand() % 20;
+                    file << origen << " " << destino << " " << costo << endl;
+                    conexiones.insert(conexion);
+                }
+            }
+        }
+        file.close();
+        cout << "Red aleatoria generada en: " << archivo << endl;
+        this->archivo(archivo);
+    }
+
 };
 
 int main() {
@@ -227,37 +271,34 @@ int main() {
         cout << "\n----- Menu ----"<< endl;
         cout << "1. Agregar Enrutador" << endl;
         cout << "2. Remover Enrutador" << endl;
-        cout << "3. Agregar enlace" << endl;
+        cout << "3. Agregar Enlace" << endl;
         cout << "4. Mostrar Tablas de Enrutamiento" << endl;
         cout << "5. Mostrar la Red" << endl;
         cout << "6. Cargar desde archivo" << endl;
         cout << "7. Calcular costo" << endl;
         cout << "8. Camino eficiente" << endl;
-        cout << "9. Salir" << endl;
+        cout << "9. Generar Red Aleatoria" << endl;
+        cout << "10. Salir" << endl;
         cout << "Ingrese opcion: ";
         cin >> opcion;
-        string nombre;
+        string nombre, origen, destino, nombreRedAleatoria;
+        int costo, numeroEnrutadores, conexiones;
         switch (opcion) {
-        case 1: {
+        case 1:
             cout << "Ingrese nombre del Enrutador: ";
             cin >> nombre;
             if (red.agregarEnrutador(Enrutador(nombre))) {
                 cout << "Enrutador " << nombre << " agregado exitosamente." << endl;
             }
             break;
-        }
-        case 2: {
+        case 2:
             cout << "Ingrese el nombre del enrutador a eliminar: ";
             cin >> nombre;
             if (red.removerEnrutador(nombre)) {
                 cout << "Enrutador " << nombre << " eliminado exitosamente." << endl;
             }
             break;
-        }
         case 3:
-        {
-            string origen, destino;
-            int costo;
             cout << "Ingrese el Enrutador origen: ";
             cin >> origen;
             cout << "Ingrese el Enrutador destino: ";
@@ -267,35 +308,53 @@ int main() {
             red.agregarEnlace(origen, destino, costo);
             cout << "Enlace agregado exitosamente.\n";
             break;
-        }
         case 4:
             red.mostrarTablas();
             break;
         case 5:
             red.mostrarRed();
             break;
-        case 6: {
+        case 6:
             cout << "Ingrese el nombre del archivo: ";
             cin >> nombre;
             red.archivo(nombre);
             break;
-        }
-        case 7: {
-            string origen, destino;
+        case 7:
+            cout << "Ingrese el Enrutador origen: ";
+            cin >> origen;
+            cout << "Ingrese el Enrutador destino: ";
+            cin >> destino;
+            costo = red.costoPaquete(origen, destino);
+            if(costo == -1){
+                cout << "No exite camino entre " << origen << " y " << destino << endl;
+            }else{
+                 cout << "El costo mínimo de " << origen << " a " << destino << " es: " << costo << endl;
+            }
+            break;
+        case 8:
             cout << "Ingrese el Enrutador origen: ";
             cin >> origen;
             cout << "Ingrese el Enrutador destino: ";
             cin >> destino;
             red.caminoPaquete(origen, destino);
             break;
-        }
-        case 8:
+        case 9:
+            cout << "Ingrese numero de Enrutadores para la red: ";
+            cin >> numeroEnrutadores;
+            cout << "Ingrese numero de conexiones por Enrutador: ";
+            cin >> conexiones;
+            cout << "Nombre del archivo para la red aleatoria: ";
+            cin >> nombreRedAleatoria;
+            red.generarRedAleatoria(numeroEnrutadores, conexiones, nombreRedAleatoria);
+            //red.archivo(nombreRedAleatoria);
+            break;
+        case 10:
             cout << "Saliendo del programa...\n";
             break;
         default:
             cout << "Opcion invalida. Intente de nuevo.\n";
             break;
         }
-    } while (opcion != 9);
+    } while (opcion != 10);
     return 0;
 }
