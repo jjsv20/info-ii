@@ -90,7 +90,7 @@ public:
     void mostrarRed(){
         cout << "\nEnrutadores en la red: ";
         for(auto& enrutador : enrutadores){
-            cout << " - " << enrutador.first << endl;
+            cout << "\n - " << enrutador.first << endl;
         }
     }
 
