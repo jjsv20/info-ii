@@ -126,15 +126,39 @@ public:
         return true;
     }
 
-    void mostrarTablas(){
-        for(auto& par : enrutadores){
-            par.second.mostrarTabla();
+    void mostrarTablas() {
+        vector<string> nombres;
+
+        // Obtener todos los nombres de enrutadores
+        for (const auto& par : enrutadores) {
+            nombres.push_back(par.first);
+        }
+
+        // Imprimir encabezado
+        cout << "\n   ";
+        for (const auto& destino : nombres) {
+            cout << setw(4) << destino;
+        }
+        cout << endl;
+
+        // Imprimir las filas
+        for (const auto& origen : nombres) {
+            cout << setw(2) << origen << " ";
+            for (const auto& destino : nombres) {
+                if (origen == destino) {
+                    cout << setw(4) << 0;
+                } else {
+                    const auto& tabla = enrutadores.at(origen).getTablaDeEnrutamiento();
+                    if (tabla.count(destino)) {
+                        cout << setw(4) << tabla.at(destino).first;
+                    } else {
+                        cout << setw(4) << "-";
+                    }
+                }
+            }
+            cout << endl;
         }
     }
-
-    /*/map<string, Enrutador> getEnrutadores(){
-        return enrutadores;
-    }/*/
 
     void archivo(const string& namearchivo) {
         ifstream archivo(namearchivo);
