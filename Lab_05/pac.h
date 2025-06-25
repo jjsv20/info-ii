@@ -11,21 +11,27 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-class Pac : public QGraphicsObject
+class Pac : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Pac(qreal x0, qreal y0);
+    explicit Pac(QObject *parent = nullptr);
 
-    QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
-
+    void setPuntos(QGraphicsTextItem *texto);
     QTimer *timer;
     QPixmap *pixmap;
 
+    float filas, columnas;
+    float ancho, alto;
+    QPainterPath shape() const override;
+
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 signals:
 public slots:
-    //void actualizar();
+    void actualizar();
+    void colisionComida();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -35,6 +41,7 @@ private:
     void moverIzquierda();
     void moverAbajo();
     void moverArriba();
+    QGraphicsTextItem *puntos;
     int contadorComida = 0;
 };
 

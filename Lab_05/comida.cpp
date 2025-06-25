@@ -7,7 +7,7 @@ Comida::Comida(qreal x0, qreal y0)
 
 QRectF Comida::boundingRect() const
 {
-    return QRectF(-5, -5, 9, 9);
+    return QRectF(0, 0, 6, 6);
 }
 
 void Comida::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
