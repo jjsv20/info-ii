@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGraphicsItem>
+#include <QGraphicsScene>
 #include <QTimer>
 #include <QPixmap>
 #include <QRectF>
@@ -24,15 +25,18 @@ public:
 
 signals:
 public slots:
-    void actualizar();
+    //void actualizar();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+
 private:
     void moverDerecha();
     void moverIzquierda();
     void moverAbajo();
     void moverArriba();
+    int contadorComida = 0;
 };
+
 
 #endif // PAC_H

@@ -24,6 +24,7 @@ public:
 private:
     Ui::Widget *ui;
     QGraphicsScene *scene;
+    QGraphicsTextItem *puntos;
     Pac *pac;
     Muro *muro;
     Comida *comida;

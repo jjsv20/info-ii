@@ -1,5 +1,6 @@
 #include "pac.h"
 #include "muro.h"
+#include "comida.h"
 
 Pac::Pac(qreal x0, qreal y0)
 {
@@ -75,9 +76,12 @@ void Pac::moverAbajo() {
             setPos(posAnterior);
             return;
         }
+        int contadorComida = 0;
+        if (Comida* comida = dynamic_cast<Comida*>(item)) {
+            scene()->removeItem(comida);
+            contadorComida++;
+            qDebug() << "Comida :" << contadorComida;
+            delete comida;
+        }
     }
 }
-
-
-
-
