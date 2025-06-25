@@ -79,6 +79,9 @@ void Pac::moverDerecha() {
     this->update(0, 0, ancho, alto);
     QPointF posAnterior = pos();
     setPos(x() + 10, y());
+    if(x() > scene()->width()){
+        setPos(0, y());
+    }
 
     for (QGraphicsItem* item : collidingItems()) {
         if (dynamic_cast<Muro*>(item)) {
@@ -98,6 +101,9 @@ void Pac::moverIzquierda() {
 
     QPointF posAnterior = pos();
     setPos(x() - 10, y());
+    if (x() + boundingRect().width() < 0) {
+        setPos(scene()->width() - boundingRect().width(), y());
+    }
 
     for (QGraphicsItem* item : collidingItems()) {
         if (dynamic_cast<Muro*>(item)) {
