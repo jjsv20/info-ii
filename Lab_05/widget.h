@@ -10,6 +10,7 @@
 #include "pac.h"
 #include "muro.h"
 #include "comida.h"
+#include "fantasmas.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,5 +35,9 @@ private:
     float x, y, ancho, alto;
     Muro *muro;
     Comida *comida;
+    Fantasmas *fantasmarojo;
+    Fantasmas *fantasmarosa;
+    Fantasmas *fantasmaamarillo;
+    Fantasmas *fantasmaazul;
 };
 #endif // WIDGET_H

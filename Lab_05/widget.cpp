@@ -74,6 +74,20 @@ Widget::Widget(QWidget *parent)
 
     PacMan->setPuntos(puntos);
 
+    fantasmarojo = new Fantasmas(":/imagenes/fantasmarojo.png");
+    scene->addItem(fantasmarojo);
+    fantasmarojo->setPacColision(PacMan);
+    fantasmarojo->setPos(100, 100);
+    fantasmaazul = new Fantasmas(":/imagenes/fantasmaazul.png");
+    scene->addItem(fantasmaazul);
+    fantasmaazul->setPos(120, 100);
+    fantasmaamarillo = new Fantasmas(":/imagenes/fantasmaamarillo.png");
+    scene->addItem(fantasmaamarillo);
+    fantasmaamarillo->setPos(140, 100);
+    fantasmarosa = new Fantasmas(":/imagenes/fantasmarosa.png");
+    scene->addItem(fantasmarosa);
+    fantasmarosa->setPos(160, 100);
+
 }
 
 

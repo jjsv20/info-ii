@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     comida.cpp \
+    fantasmas.cpp \
     main.cpp \
     muro.cpp \
     pac.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     comida.h \
+    fantasmas.h \
     muro.h \
     pac.h \
     widget.h

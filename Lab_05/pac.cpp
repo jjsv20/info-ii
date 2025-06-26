@@ -39,8 +39,8 @@ Pac::Pac(QObject *parent) : QObject(parent)
     columnas = 0;
     pixmap = new QPixmap(":/imagenes/pac.png");
 
-    ancho = 16;
-    alto = 16;
+    ancho = 15;
+    alto = 15;
 
     //timer->start(250);
     //connect(timer, &QTimer::timeout, this, &Pac::actualizar);

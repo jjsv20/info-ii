@@ -1,0 +1,40 @@
+#ifndef FANTASMAS_H
+#define FANTASMAS_H
+
+#include <QObject>
+#include <QGraphicsPixmapItem>
+#include <QTimer>
+#include <QPixmap>
+#include "muro.h"
+#include "pac.h"
+
+class Fantasmas : public QObject, public QGraphicsPixmapItem
+{
+    Q_OBJECT
+public:
+    explicit Fantasmas(QString rutaSprite, QObject *parent = nullptr);
+
+    QTimer *timer;
+    QPixmap *pixmap;
+
+    float filas, columnas;
+    float ancho, alto, escala;
+
+    QPainterPath shape() const override;
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+    void setPacColision(Pac* pacman);
+
+signals:
+public slots:
+    //void actualizar();
+    void mover();
+
+private:
+    int direccion;
+    Pac *pacColision = nullptr;
+
+};
+
+#endif // FANTASMAS_H

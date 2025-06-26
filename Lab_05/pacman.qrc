@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/">
         <file>imagenes/pac.png</file>
+        <file>imagenes/fantasmaamarillo.png</file>
+        <file>imagenes/fantasmaazul.png</file>
+        <file>imagenes/fantasmarosa.png</file>
+        <file>imagenes/fantasmarojo.png</file>
     </qresource>
 </RCC>
