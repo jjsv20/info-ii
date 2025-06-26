@@ -26,7 +26,7 @@ Widget::Widget(QWidget *parent)
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1},
-        {1,0,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1},
+        {1,3,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,3,1},
         {1,0,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,1,1,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,0,1},
@@ -42,7 +42,7 @@ Widget::Widget(QWidget *parent)
         {1,1,1,1,1,0,1,2,1,1,1,1,1,1,1,2,1,0,1,1,1,1,1},
         {1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,1,1,1,0,1,1,1,1,0,1,0,1,1,1,1,0,1,1,1,0,1},
-        {1,0,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,0,1},
+        {1,3,0,0,1,0,0,0,0,0,0,2,0,0,0,0,0,0,1,0,0,3,1},
         {1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,0,1,0,1,1,1},
         {1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1},
         {1,0,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1},
@@ -59,11 +59,16 @@ Widget::Widget(QWidget *parent)
                 //muro->setPos(x, y);
                 scene->addItem(muro);
             }else if(mapa[fila][col] == 0){
-                int x = col * 22 + (22 - 6) / 2;
-                int y = fila * 22 + (22 - 6) / 2;
+                int x = col * 22 + (22 - 4) / 2;
+                int y = fila * 22 + (22 - 4) / 2;
                 comida = new Comida(x, y);
                 //comida->setPos(x,y);
                 scene->addItem(comida);
+            }else if(mapa[fila][col] == 3){
+                int x = col * 22 + (22 - 10) / 2;
+                int y = fila * 22 + (22 - 10) / 2;
+                comidaespecial = new ComidaEspecial(x, y);
+                scene->addItem(comidaespecial);
             }
         }
     }
@@ -77,16 +82,19 @@ Widget::Widget(QWidget *parent)
     fantasmarojo = new Fantasmas(":/imagenes/fantasmarojo.png");
     scene->addItem(fantasmarojo);
     fantasmarojo->setPacColision(PacMan);
-    fantasmarojo->setPos(100, 100);
+    fantasmarojo->setPos(25, 377);
     fantasmaazul = new Fantasmas(":/imagenes/fantasmaazul.png");
     scene->addItem(fantasmaazul);
-    fantasmaazul->setPos(120, 100);
+    fantasmaazul->setPacColision(PacMan);
+    fantasmaazul->setPos(465, 377);
     fantasmaamarillo = new Fantasmas(":/imagenes/fantasmaamarillo.png");
     scene->addItem(fantasmaamarillo);
-    fantasmaamarillo->setPos(140, 100);
+    fantasmaamarillo->setPacColision(PacMan);
+    fantasmaamarillo->setPos(245, 113);
     fantasmarosa = new Fantasmas(":/imagenes/fantasmarosa.png");
     scene->addItem(fantasmarosa);
-    fantasmarosa->setPos(160, 100);
+    fantasmarosa->setPacColision(PacMan);
+    fantasmarosa->setPos(113, 465);
 
 }
 

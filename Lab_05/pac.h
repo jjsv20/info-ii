@@ -18,8 +18,11 @@ public:
     explicit Pac(QObject *parent = nullptr);
 
     void setPuntos(QGraphicsTextItem *texto);
-    QTimer *timer;
+    QTimer *timer, *muerte;
     QPixmap *pixmap;
+
+    bool estaMuerto = false;
+    int cuadros = 0;
 
     float filas, columnas;
     float ancho, alto;
@@ -32,6 +35,8 @@ signals:
 public slots:
     void actualizar();
     void colisionComida();
+    //void colisionComidaEspecial();
+    void spriteMuerte();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

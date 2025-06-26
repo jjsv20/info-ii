@@ -1,4 +1,5 @@
 #include "fantasmas.h"
+#include "pac.h"
 #include <QGraphicsScene>
 #include <QDebug>
 
@@ -16,7 +17,7 @@ Fantasmas::Fantasmas(QString rutaSprite, QObject *parent) : QObject{parent}
 
 
     direccion = rand() % 4;
-    timer->start(250);
+    timer->start(300);
     connect(timer, &QTimer::timeout, this, &Fantasmas::mover);
 }
 
@@ -50,10 +51,10 @@ void Fantasmas::mover()
 {
     QPointF posAnterior = pos();
     switch (direccion) {
-    case 0: setPos(x() - 10, y()); break;
-    case 1: setPos(x() + 10, y()); break;
-    case 2: setPos(x(), y() - 10); break;
-    case 3: setPos(x(), y() + 10); break;
+    case 0: setPos(x() - 15, y()); break;
+    case 1: setPos(x() + 15, y()); break;
+    case 2: setPos(x(), y() - 15); break;
+    case 3: setPos(x(), y() + 15); break;
     }
     for (QGraphicsItem* item : collidingItems()) {
         if (dynamic_cast<Muro*>(item)) {
@@ -62,8 +63,12 @@ void Fantasmas::mover()
             return;
         }
         if(pacColision && item == pacColision){
+            setPos(posAnterior);
+            timer->stop();
+            pacColision->spriteMuerte();
             qDebug() << "colision fantasma - pacman";
             break;
         }
     }
 }
+

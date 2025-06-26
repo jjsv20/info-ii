@@ -14,7 +14,8 @@ class Fantasmas : public QObject, public QGraphicsPixmapItem
 public:
     explicit Fantasmas(QString rutaSprite, QObject *parent = nullptr);
 
-    QTimer *timer;
+    QTimer *timer, *salidajaula;
+    bool encerrado;
     QPixmap *pixmap;
 
     float filas, columnas;

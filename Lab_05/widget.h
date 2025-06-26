@@ -11,6 +11,7 @@
 #include "muro.h"
 #include "comida.h"
 #include "fantasmas.h"
+#include "comidaespecial.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,5 +40,6 @@ private:
     Fantasmas *fantasmarosa;
     Fantasmas *fantasmaamarillo;
     Fantasmas *fantasmaazul;
+    ComidaEspecial *comidaespecial;
 };
 #endif // WIDGET_H

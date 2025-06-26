@@ -1,6 +1,7 @@
 #include "pac.h"
 #include "muro.h"
 #include "comida.h"
+#include "comidaespecial.h"
 
 void Pac::setPuntos(QGraphicsTextItem* texto) {
     puntos = texto;
@@ -28,9 +29,64 @@ void Pac::colisionComida()
                     puntos->setPlainText("Score: " + QString::number(contadorComida));
                 }
             }
+        }else if(ComidaEspecial* comidaEspecial = dynamic_cast<ComidaEspecial*>(i)){
+            if(collidesWithItem(comidaEspecial)){
+                scene()->removeItem(comidaEspecial);
+                delete comidaEspecial;
+                contadorComida += 50;
+                if(puntos){
+                    puntos->setPlainText("Score: " + QString::number(contadorComida));
+                }
+            }
         }
     }
 }
+
+void Pac::spriteMuerte()
+{
+    if(estaMuerto){
+        return;
+    }
+
+    estaMuerto = true;
+    columnas = 0;
+    filas = 0;
+    ancho = 18.5;
+    alto = 15;
+    cuadros = 0;
+    pixmap = new QPixmap(":/imagenes/muerte.png");
+
+    muerte = new QTimer();
+    connect(muerte, &QTimer::timeout, [=]() {
+        columnas = cuadros * ancho;
+        update(0, 0, ancho, alto);
+        cuadros++;
+        if (cuadros >= 4) {
+            muerte->stop();
+            delete muerte;
+            muerte = nullptr;
+            qDebug() << "Pac-Man ha muerto.";
+        }
+    });
+    muerte->start(50);
+}
+
+/*/void Pac::colisionComidaEspecial()
+{
+    const auto items = scene()->items();
+    for(auto i : items){
+        if(ComidaEspecial* comidaEspecial = dynamic_cast<ComidaEspecial*>(i)){
+            if(collidesWithItem(comidaEspecial)){
+                scene()->removeItem(comidaEspecial);
+                delete comidaEspecial;
+                contadorComida += 50;
+                if(puntos){
+                    puntos->setPlainText("Score: " + QString::number(contadorComida));
+                }
+            }
+        }
+    }
+}/*/
 
 Pac::Pac(QObject *parent) : QObject(parent)
 {
