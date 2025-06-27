@@ -6,5 +6,6 @@
         <file>imagenes/fantasmarosa.png</file>
         <file>imagenes/fantasmarojo.png</file>
         <file>imagenes/muerte.png</file>
+        <file>imagenes/fondo.png</file>
     </qresource>
 </RCC>

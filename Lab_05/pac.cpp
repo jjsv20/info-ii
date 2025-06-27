@@ -2,9 +2,15 @@
 #include "muro.h"
 #include "comida.h"
 #include "comidaespecial.h"
+#include "fantasmas.h"
 
 void Pac::setPuntos(QGraphicsTextItem* texto) {
     puntos = texto;
+}
+
+void Pac::setVidasText(QGraphicsTextItem *texto)
+{
+    vidastext = texto;
 }
 
 void Pac::actualizar()
@@ -62,31 +68,22 @@ void Pac::spriteMuerte()
         update(0, 0, ancho, alto);
         cuadros++;
         if (cuadros >= 4) {
-            muerte->stop();
             delete muerte;
             muerte = nullptr;
+            perderVida();
             qDebug() << "Pac-Man ha muerto.";
+            QTimer::singleShot(1000, [=](){
+                reiniciar();
+                for (Fantasmas* f : Fantasmas::listaFantasmas) {
+                    f->reiniciarF();
+                    f->start();
+                }
+            });
         }
     });
     muerte->start(50);
 }
 
-/*/void Pac::colisionComidaEspecial()
-{
-    const auto items = scene()->items();
-    for(auto i : items){
-        if(ComidaEspecial* comidaEspecial = dynamic_cast<ComidaEspecial*>(i)){
-            if(collidesWithItem(comidaEspecial)){
-                scene()->removeItem(comidaEspecial);
-                delete comidaEspecial;
-                contadorComida += 50;
-                if(puntos){
-                    puntos->setPlainText("Score: " + QString::number(contadorComida));
-                }
-            }
-        }
-    }
-}/*/
 
 Pac::Pac(QObject *parent) : QObject(parent)
 {
@@ -98,8 +95,8 @@ Pac::Pac(QObject *parent) : QObject(parent)
     ancho = 15;
     alto = 15;
 
-    //timer->start(250);
-    //connect(timer, &QTimer::timeout, this, &Pac::actualizar);
+    posicionInicial = QPointF(245, 425);
+    setPos(posicionInicial);
 }
 
 QRectF Pac::boundingRect() const
@@ -113,6 +110,40 @@ void Pac::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidg
 
 }
 
+void Pac::reiniciar()
+{
+    estaMuerto = false;
+    columnas = 0;
+    filas = 0;
+    ancho = 15;
+    alto = 15;
+    pixmap = new QPixmap(":/imagenes/pac.png");
+    setPos(posicionInicial);
+    update();
+}
+
+void Pac::perderVida()
+{
+    if (vidas > 0) {
+        vidas--;
+        if (vidastext) {
+            vidastext->setPlainText("Vidas: " + QString::number(vidas));
+        }
+    }
+    if(vidas > 0){
+        estaMuerto = false;
+        columnas = 0;
+        filas = 0;
+        ancho = 16;
+        alto = 16;
+        setPos(posicionInicial);
+        update();
+    }else {
+        qDebug() << "¡Game Over!";
+        emit reiniciarPartida();
+    }
+}
+
 
 void Pac::keyPressEvent(QKeyEvent *event)
 {
@@ -121,7 +152,7 @@ void Pac::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D: moverDerecha(); qDebug() << "Tecla: D"; break;
     case Qt::Key_A: moverIzquierda(); qDebug() << "Tecla: A"; break;
     case Qt::Key_Z: moverAbajo(); qDebug() << "Tecla: Z"; break;
-    case Qt::Key_W: moverArriba(); qDebug() << "Tecla: W"; break;
+    case Qt::Key_S: moverArriba(); qDebug() << "Tecla: S"; break;
         //default: QGraphicsObject::keyPressEvent(event);
     }
 }

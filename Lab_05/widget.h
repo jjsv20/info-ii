@@ -7,6 +7,7 @@
 #include <QGraphicsItem>
 #include <QRectF>
 #include <QDebug>
+#include <QPushButton>
 #include "pac.h"
 #include "muro.h"
 #include "comida.h"
@@ -26,11 +27,18 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+private slots:
+    void iniciarJuego();
+    void on_btnSalir_clicked();
+    void on_btnJugar_clicked();
+    void volver();
 
 private:
     Ui::Widget *ui;
+    QGraphicsScene *Inicio;
     QGraphicsScene *scene;
     QGraphicsTextItem *puntos;
+    QGraphicsTextItem *vidastext;
     Pac *PacMan;
     //Pac *pac;
     float x, y, ancho, alto;

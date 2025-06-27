@@ -1,11 +1,23 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-Widget::Widget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Widget)
+Widget::Widget(QWidget *parent): QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(0);
+
+}
+
+
+
+Widget::~Widget()
+{
+    delete ui;
+}
+
+void Widget::iniciarJuego()
+{
+    ui->stackedWidget->setCurrentIndex(1);
 
     scene = new QGraphicsScene;
     scene->setSceneRect(0, 0, 508, 618);
@@ -16,11 +28,18 @@ Widget::Widget(QWidget *parent)
     puntos->setPos(10, 560);
     scene->addItem(puntos);
 
+    vidastext = new QGraphicsTextItem("Vidas: 3");
+    vidastext->setDefaultTextColor(Qt::yellow);
+    vidastext->setFont(QFont("Arial",12));
+    vidastext->setPos(120, 560);
+    scene->addItem(vidastext);
+
     PacMan = new Pac();
     scene->addItem(PacMan);
     PacMan->setPos(245, 425);
     PacMan->setFlag(QGraphicsItem::ItemIsFocusable);
     PacMan->setFocus();
+    connect(PacMan, &Pac::reiniciarPartida, this, &Widget::volver);
 
     int mapa[25][23] = {
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -78,29 +97,47 @@ Widget::Widget(QWidget *parent)
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     PacMan->setPuntos(puntos);
+    PacMan->setVidasText(vidastext);
 
     fantasmarojo = new Fantasmas(":/imagenes/fantasmarojo.png");
     scene->addItem(fantasmarojo);
     fantasmarojo->setPacColision(PacMan);
-    fantasmarojo->setPos(25, 377);
+    fantasmarojo->setPos(24, 381);
+    fantasmarojo->guardarPosicionInicial();
     fantasmaazul = new Fantasmas(":/imagenes/fantasmaazul.png");
     scene->addItem(fantasmaazul);
     fantasmaazul->setPacColision(PacMan);
-    fantasmaazul->setPos(465, 377);
+    fantasmaazul->setPos(465, 383);
+    fantasmaazul->guardarPosicionInicial();
     fantasmaamarillo = new Fantasmas(":/imagenes/fantasmaamarillo.png");
     scene->addItem(fantasmaamarillo);
     fantasmaamarillo->setPacColision(PacMan);
     fantasmaamarillo->setPos(245, 113);
+    fantasmaamarillo->guardarPosicionInicial();
     fantasmarosa = new Fantasmas(":/imagenes/fantasmarosa.png");
     scene->addItem(fantasmarosa);
     fantasmarosa->setPacColision(PacMan);
-    fantasmarosa->setPos(113, 465);
-
+    fantasmarosa->setPos(100, 465);
+    fantasmarosa->guardarPosicionInicial();
+    QList<Fantasmas*> fantasmas = { fantasmarojo, fantasmaazul, fantasmaamarillo, fantasmarosa };
+    Fantasmas::setListaFantasmas(fantasmas);
 }
 
 
 
-Widget::~Widget()
+void Widget::on_btnSalir_clicked()
 {
-    delete ui;
+    close();
 }
+
+
+void Widget::on_btnJugar_clicked()
+{
+    iniciarJuego();
+}
+
+void Widget::volver()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+

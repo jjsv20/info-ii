@@ -26,6 +26,12 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     void setPacColision(Pac* pacman);
+    void detener();
+    void reiniciarF();
+    void guardarPosicionInicial();
+    void start();
+    static void setListaFantasmas(const QList<Fantasmas*>& lista);
+    static QList<Fantasmas*> listaFantasmas;
 
 signals:
 public slots:
@@ -35,7 +41,8 @@ public slots:
 private:
     int direccion;
     Pac *pacColision = nullptr;
-
+    QPointF posicionInicial;
+    QString rutaSprite;
 };
 
 #endif // FANTASMAS_H
