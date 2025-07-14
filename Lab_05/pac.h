@@ -41,7 +41,6 @@ signals:
 public slots:
     void actualizar();
     void colisionComida();
-    //void colisionComidaEspecial();
     void spriteMuerte();
 
 protected:

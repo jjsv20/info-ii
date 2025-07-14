@@ -4,6 +4,19 @@
 #include "comidaespecial.h"
 #include "fantasmas.h"
 
+Pac::Pac(QObject *parent) : QObject(parent)
+{
+    filas = 0;
+    columnas = 0;
+    pixmap = new QPixmap(":/imagenes/pac.png");
+
+    ancho = 15;
+    alto = 15;
+
+    posicionInicial = QPointF(245, 425);
+    setPos(posicionInicial);
+}
+
 void Pac::setPuntos(QGraphicsTextItem* texto) {
     puntos = texto;
 }
@@ -82,21 +95,6 @@ void Pac::spriteMuerte()
         }
     });
     muerte->start(50);
-}
-
-
-Pac::Pac(QObject *parent) : QObject(parent)
-{
-    //timer = new QTimer();
-    filas = 0;
-    columnas = 0;
-    pixmap = new QPixmap(":/imagenes/pac.png");
-
-    ancho = 15;
-    alto = 15;
-
-    posicionInicial = QPointF(245, 425);
-    setPos(posicionInicial);
 }
 
 QRectF Pac::boundingRect() const

@@ -45,14 +45,14 @@ Widget::Widget(QWidget *parent)
 
     ui->tabla->setColumnCount(7);
     ui->tabla->setHorizontalHeaderLabels(QStringList()
-                                         << "Cuerpo"
-                                         << "Posición X inicial"
-                                         << "Posición Y inicial"
-                                         << "Masa"
-                                         << "Radio"
-                                         << "Velocidad X inicial"
-                                         << "Velocidad Y inicial");
-
+        << "Cuerpo"
+        << "Posición X inicial"
+        << "Posición Y inicial"
+        << "Masa"
+        << "Radio"
+        << "Velocidad X inicial"
+        << "Velocidad Y inicial"
+    );
 }
 
 Widget::~Widget()

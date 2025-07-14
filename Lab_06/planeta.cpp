@@ -26,9 +26,12 @@ void Planeta::actualizar(double fuerzaX, double fuerzaY, double tiempo)
     double ax = fuerzaX / masa;
     double ay = fuerzaY / masa;
 
+    double vx0 = velX;
+    double vy0 = velY;
+
     velX += ax * tiempo; //vx=vx0+axt
     velY += ay * tiempo; //vy=vy0+ayt
 
-    posX += velX * tiempo + 0.5 * ax * tiempo * tiempo; //x=x0+vxt + 0.5*ax*t*t
-    posY += velY * tiempo + 0.5 * ay * tiempo * tiempo; //y=y0+vyt + 0.5*ayt*t
+    posX += vx0 * tiempo + 0.5 * ax * tiempo * tiempo; //x=x0+vxt + 0.5*ax*t*t
+    posY += vy0 * tiempo + 0.5 * ay * tiempo * tiempo; //y=y0+vyt + 0.5*ayt*t
 }

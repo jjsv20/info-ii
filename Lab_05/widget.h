@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QPainter>
-//#include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QRectF>
 #include <QDebug>
@@ -40,7 +39,6 @@ private:
     QGraphicsTextItem *puntos;
     QGraphicsTextItem *vidastext;
     Pac *PacMan;
-    //Pac *pac;
     float x, y, ancho, alto;
     Muro *muro;
     Comida *comida;

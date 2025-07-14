@@ -5,10 +5,7 @@ Widget::Widget(QWidget *parent): QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-
 }
-
-
 
 Widget::~Widget()
 {
@@ -104,21 +101,25 @@ void Widget::iniciarJuego()
     fantasmarojo->setPacColision(PacMan);
     fantasmarojo->setPos(24, 381);
     fantasmarojo->guardarPosicionInicial();
+
     fantasmaazul = new Fantasmas(":/imagenes/fantasmaazul.png");
     scene->addItem(fantasmaazul);
     fantasmaazul->setPacColision(PacMan);
     fantasmaazul->setPos(465, 383);
     fantasmaazul->guardarPosicionInicial();
+
     fantasmaamarillo = new Fantasmas(":/imagenes/fantasmaamarillo.png");
     scene->addItem(fantasmaamarillo);
     fantasmaamarillo->setPacColision(PacMan);
     fantasmaamarillo->setPos(245, 113);
     fantasmaamarillo->guardarPosicionInicial();
+
     fantasmarosa = new Fantasmas(":/imagenes/fantasmarosa.png");
     scene->addItem(fantasmarosa);
     fantasmarosa->setPacColision(PacMan);
     fantasmarosa->setPos(100, 465);
     fantasmarosa->guardarPosicionInicial();
+
     QList<Fantasmas*> fantasmas = { fantasmarojo, fantasmaazul, fantasmaamarillo, fantasmarosa };
     Fantasmas::setListaFantasmas(fantasmas);
 }
