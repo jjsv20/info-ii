@@ -7,30 +7,35 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->x->setMinimum(-10000);
-    ui->x->setMaximum(10000);
-    ui->x->setDecimals(2);
+    ui->x->setMinimum(-100000);
+    ui->x->setMaximum(100000);
+    ui->x->setDecimals(4);
 
-    ui->y->setMinimum(-10000);
-    ui->y->setMaximum(10000);
-    ui->y->setDecimals(2);
+    ui->y->setMinimum(-100000);
+    ui->y->setMaximum(100000);
+    ui->y->setDecimals(4);
 
-    ui->vx->setMinimum(-1000);
-    ui->vx->setMaximum(1000);
-    ui->vx->setDecimals(2);
+    ui->vx->setMinimum(-10000);
+    ui->vx->setMaximum(10000);
+    ui->vx->setDecimals(4);
 
-    ui->vy->setMinimum(-1000);
-    ui->vy->setMaximum(1000);
-    ui->vy->setDecimals(2);
+    ui->vy->setMinimum(-10000);
+    ui->vy->setMaximum(10000);
+    ui->vy->setDecimals(4);
 
     ui->m->setMinimum(0.1);     // masa no debe ser negativa
     ui->m->setMaximum(100000);  // masa muy grande
-    ui->m->setDecimals(2);
+    ui->m->setDecimals(4);
 
     ui->r->setMinimum(1);       // radio no debe ser cero
     ui->r->setMaximum(1000);
-    ui->r->setDecimals(2);
+    ui->r->setDecimals(4);
 
+    ui->x->setValue(0);
+    ui->y->setValue(0);
+    ui->vx->setValue(0);
+    ui->vy->setValue(0);
+    ui->m->setValue(0);
 
     escena = new QGraphicsScene(this);
     ui->graphicsView->setScene(escena);
@@ -43,9 +48,8 @@ Widget::Widget(QWidget *parent)
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Widget::simular);
 
-    ui->tabla->setColumnCount(7);
+    ui->tabla->setColumnCount(6);
     ui->tabla->setHorizontalHeaderLabels(QStringList()
-        << "Cuerpo"
         << "Posición X inicial"
         << "Posición Y inicial"
         << "Masa"
@@ -79,14 +83,19 @@ void Widget::on_agregar_clicked()
     int fila = ui->tabla->rowCount();
     ui->tabla->insertRow(fila);
 
-    ui->tabla->setItem(fila, 0, new QTableWidgetItem(QString::number(fila + 1)));
-    ui->tabla->setItem(fila, 1, new QTableWidgetItem(QString::number(posicionX)));
-    ui->tabla->setItem(fila, 2, new QTableWidgetItem(QString::number(posicionY)));
-    ui->tabla->setItem(fila, 3, new QTableWidgetItem(QString::number(masa)));
-    ui->tabla->setItem(fila, 4, new QTableWidgetItem(QString::number(radio)));
-    ui->tabla->setItem(fila, 5, new QTableWidgetItem(QString::number(velocidadX)));
-    ui->tabla->setItem(fila, 6, new QTableWidgetItem(QString::number(velocidadY)));
+    ui->tabla->setItem(fila, 0, new QTableWidgetItem(QString::number(posicionX)));
+    ui->tabla->setItem(fila, 1, new QTableWidgetItem(QString::number(posicionY)));
+    ui->tabla->setItem(fila, 2, new QTableWidgetItem(QString::number(masa)));
+    ui->tabla->setItem(fila, 3, new QTableWidgetItem(QString::number(radio)));
+    ui->tabla->setItem(fila, 4, new QTableWidgetItem(QString::number(velocidadX)));
+    ui->tabla->setItem(fila, 5, new QTableWidgetItem(QString::number(velocidadY)));
 
+    ui->x->setValue(0);
+    ui->y->setValue(0);
+    ui->vx->setValue(0);
+    ui->vy->setValue(0);
+    ui->m->setValue(0);
+    ui->r->setValue(1);
 }
 
 
@@ -98,6 +107,13 @@ void Widget::on_limpiar_clicked()
     planetasGraficos.clear();
 
     ui->tabla->setRowCount(0);
+
+    ui->x->setValue(0);
+    ui->y->setValue(0);
+    ui->vx->setValue(0);
+    ui->vy->setValue(0);
+    ui->m->setValue(0);
+    ui->r->setValue(1);
 }
 
 
