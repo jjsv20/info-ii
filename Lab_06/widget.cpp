@@ -164,11 +164,6 @@ void Widget::simular()
     }
 }
 
-void Widget::agregarFila()
-{
-
-}
-
 void Widget::dibujarPlaneta(Planeta *p)
 {
     double radioVisual = 500;

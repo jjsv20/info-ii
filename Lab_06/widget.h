@@ -41,7 +41,6 @@ private:
     QVector<QGraphicsEllipseItem*> planetasGraficos;
     QTimer* timer;
 
-    void agregarFila();
     void dibujarPlaneta(Planeta *p);
 };
 #endif // WIDGET_H
